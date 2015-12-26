@@ -1,4 +1,4 @@
-﻿X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick Box Component.vbprojResolveAssemblyReference.cache
+X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick Box Component.vbprojResolveAssemblyReference.cache
 X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick_Box_Component.Resources.resources
 X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick Box Component.vbproj.GenerateResource.Cache
 X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\bin\Brick Box.dll.config
@@ -8,3 +8,13 @@ X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\bin\Brick B
 X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick Box.dll
 X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick Box.xml
 X:\Grasshopper\Míos\LegoBox\Brick Box Component\Brick Box Component\obj\Debug64\Brick Box.pdb
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\bin\Brick Box.dll.config
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\bin\Brick Box.dll
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\bin\Brick Box.pdb
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\bin\Brick Box.xml
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\obj\Debug64\Brick Box Component.vbprojResolveAssemblyReference.cache
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\obj\Debug64\Brick_Box_Component.Resources.resources
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\obj\Debug64\Brick Box Component.vbproj.GenerateResource.Cache
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\obj\Debug64\Brick Box.dll
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\obj\Debug64\Brick Box.xml
+X:\Grasshopper\Míos\LegoBox\GhBrickBoxComponent\Brick Box Component\obj\Debug64\Brick Box.pdb

@@ -143,18 +143,21 @@ Public Class Form1
 
     Private Sub Form1_HelpButtonClicked(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles MyBase.HelpButtonClicked
 
-        MessageBox.Show("Gh Brick Box is an UI that serves to manage Grasshopper definitions," & vbCrLf &
-                        "a simple way to save and load pieces of definitions, geometry, or components with added parameters." & vbCrLf &
+        MessageBox.Show("Gh Brick Box is an UI that serves to manage pieces of definitions," & vbCrLf &
+                        "geometry, or components with added parameters, all within a component." & vbCrLf &
                         "" & vbCrLf &
-"Requires to have loaded a gh file (*.gh/*.ghx) to read and store data. All changes are saved when you close the box." & vbCrLf &
+"Requires to have loaded a gh file (*.gh/*.ghx) to read and store binary data. All changes are saved when you close the box, serialized within the gh file." & vbCrLf &
 "Note that the file becomes unusable, because if you save the document from gh you will lose all data." & vbCrLf &
                         "" & vbCrLf &
-"To extract a brick: select it and press Accept button." & vbCrLf &
-"To add a new brick: press Add button, select the components on the canvas, give it a name and press Done." & vbCrLf &
-"To manage tabs: press the left side button, select the edit mode, fill the text box and press Accept." & vbCrLf &
-"To preview a brick: press right click on a brick." & vbCrLf &
+"*How to use it*" & vbCrLf &
+"First you need to have loaded a file to read or write brick data. Use the |File button| to open a new file." & vbCrLf &
+"When you open a brick data file, will appear tabs and bricks.You can browse, select the item you want and press |Accept button| to take it to the canvas." & vbCrLf &
+"Pressing right click on a brick, a window with the enlarge image is displayed." & vbCrLf &
+"You can manage the tabs from the |left side button|, selecting an edit mode, filling text boxes and pressing accept to make changes." & vbCrLf &
+"To add a new brick in the box, press the |Add button| and a pop-up window will appear. Select the components on the canvas which want to add," & vbCrLf &
+"the image of the brick may be the screenshot of the canvas or rhino viewport. Add a name for the new brick in the text box and press done." & vbCrLf &
 "" & vbCrLf &
-"", "Help")
+"Right-clicking on the component, you can access to contact and development information.", "Help")
         e.Cancel = True
     End Sub
 #End Region
@@ -1274,8 +1277,16 @@ Public Class BrickBoxComp
 
     Protected Overrides Sub AppendAdditionalComponentMenuItems(menu As ToolStripDropDown)
         MyBase.AppendAdditionalComponentMenuItems(menu)
-        GH_DocumentObject.Menu_AppendItem(menu, "Enjoy it! ツ")
+        GH_DocumentObject.Menu_AppendItem(menu, "Contact", AddressOf Contact)
     End Sub
+
+    Private PopUp As ContactPopUp
+
+    Private Sub Contact(ByVal sender As Object, ByVal e As EventArgs)
+        If (PopUp IsNot Nothing) Then PopUp.Dispose()
+        PopUp = New ContactPopUp()
+    End Sub
+
 End Class
 
 Public Class BrickBoxCompAtt
@@ -1666,4 +1677,104 @@ Partial Class Form1
     Friend WithEvents ToolTip1 As ToolTip
     Friend WithEvents TabControl1 As TabControl
     Friend WithEvents OpenFileDialog1 As OpenFileDialog
+End Class
+
+Class ContactPopUp
+    Inherits System.Windows.Forms.Form
+
+    Sub New()
+        InitializeComponent()
+        Me.Show()
+    End Sub
+
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    Private components As System.ComponentModel.IContainer
+
+    Private Sub InitializeComponent()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel()
+        Me.SuspendLayout()
+        '
+        'TextBox1
+        '
+        Me.TextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.Location = New System.Drawing.Point(30, 32)
+        Me.TextBox1.Margin = New System.Windows.Forms.Padding(0)
+        Me.TextBox1.MinimumSize = New System.Drawing.Size(0, 30)
+        Me.TextBox1.Multiline = True
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.ReadOnly = True
+        Me.TextBox1.Size = New System.Drawing.Size(131, 30)
+        Me.TextBox1.TabIndex = 1
+        Me.TextBox1.TabStop = False
+        Me.TextBox1.Text = "dga_3@hotmail.com"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.TextBox2.BorderStyle = System.Windows.Forms.BorderStyle.None
+        Me.TextBox2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.Location = New System.Drawing.Point(105, 115)
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.ReadOnly = True
+        Me.TextBox2.Size = New System.Drawing.Size(73, 13)
+        Me.TextBox2.TabIndex = 3
+        Me.TextBox2.Text = "- Daniel Abalde"
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LinkLabel1.Location = New System.Drawing.Point(39, 71)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(112, 16)
+        Me.LinkLabel1.TabIndex = 2
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "GitHub repository"
+        '
+        'Form1
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.BackColor = System.Drawing.SystemColors.Control
+        Me.ClientSize = New System.Drawing.Size(190, 140)
+        Me.Controls.Add(Me.LinkLabel1)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.TextBox1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow
+        Me.Name = "Form1"
+        Me.ShowInTaskbar = False
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
+        Me.Text = "Contact"
+        Me.TopMost = True
+        Me.ResumeLayout(False)
+        Me.PerformLayout()
+
+    End Sub
+
+    Friend WithEvents LinkLabel1 As LinkLabel
+    Friend WithEvents TextBox1 As TextBox
+    Friend WithEvents TextBox2 As TextBox
+
+    Private Sub LinkLabel1_LinkClicked(sender As Object, e As LinkLabelLinkClickedEventArgs) Handles LinkLabel1.LinkClicked
+        System.Diagnostics.Process.Start(e.Link.LinkData.ToString())
+    End Sub
+
+    Private Sub ContactPopUp_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+        Dim link As New LinkLabel.Link()
+        link.LinkData = "https://github.com/DanielAbalde/GhBrickBox"
+        LinkLabel1.Links.Add(link)
+    End Sub
+
 End Class
