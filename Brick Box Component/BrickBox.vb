@@ -643,6 +643,7 @@ Public Class Brick
                 b.Dispose()
                 Me.Dispose()
                 _form1.Caja.Seleccionado = Nothing
+                _form1.Caja.NombresBloques.RemoveAt(_form1.Caja.NombresBloques.IndexOf(b.Nombre))
                 If (_form1.Caja.Display IsNot Nothing) Then _form1.Caja.HidePreview()
                 If (Convert.ToBoolean(_form1.ButtOpenTabs.Tag)) Then _form1.TabsToTree()
                 Return
