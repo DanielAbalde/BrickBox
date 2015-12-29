@@ -2,18 +2,20 @@
 Imports Grasshopper.Kernel
 Imports GH_IO
 Imports GH_IO.Serialization
-Imports Grasshopper.GUI.Canvas
 Imports Grasshopper.GUI
+Imports Grasshopper.GUI.Canvas
 Imports System
 Imports System.Drawing
 Imports System.Windows.Forms
 
 Public Class Form1
+    Inherits System.Windows.Forms.Form
 
     Public Caja As BrickBox
     Public MensajeForm As MensajeSeleccion
     Public Doc As GH_Document
     Public Comp As BrickBoxComp
+    Private AskToSave As Boolean
 
     Sub New(_Comp As BrickBoxComp)
         InitializeComponent()
@@ -22,6 +24,7 @@ Public Class Form1
         Me.Show()
         Caja = New BrickBox(Me)
         Caja.Seleccionado = Nothing
+        AskToSave = True
     End Sub
 
 #Region "Design"
@@ -45,6 +48,330 @@ Public Class Form1
         Me.Comp.IsOpen = False
         Me.Comp.ExpireSolution(True)
     End Sub
+
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    Public components As System.ComponentModel.IContainer
+
+    Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.ButtOpenTabs = New System.Windows.Forms.Button()
+        Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer6 = New System.Windows.Forms.SplitContainer()
+        Me.ButtFile = New System.Windows.Forms.Button()
+        Me.SplitContainer7 = New System.Windows.Forms.SplitContainer()
+        Me.ButtDel = New System.Windows.Forms.Button()
+        Me.ButtAdd = New System.Windows.Forms.Button()
+        Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
+        Me.ButtCancel = New System.Windows.Forms.Button()
+        Me.ButtAccept = New System.Windows.Forms.Button()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer3.Panel1.SuspendLayout()
+        Me.SplitContainer3.Panel2.SuspendLayout()
+        Me.SplitContainer3.SuspendLayout()
+        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer4.Panel1.SuspendLayout()
+        Me.SplitContainer4.Panel2.SuspendLayout()
+        Me.SplitContainer4.SuspendLayout()
+        CType(Me.SplitContainer6, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer6.Panel1.SuspendLayout()
+        Me.SplitContainer6.Panel2.SuspendLayout()
+        Me.SplitContainer6.SuspendLayout()
+        CType(Me.SplitContainer7, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer7.Panel1.SuspendLayout()
+        Me.SplitContainer7.Panel2.SuspendLayout()
+        Me.SplitContainer7.SuspendLayout()
+        CType(Me.SplitContainer5, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer5.Panel1.SuspendLayout()
+        Me.SplitContainer5.Panel2.SuspendLayout()
+        Me.SplitContainer5.SuspendLayout()
+        Me.SuspendLayout()
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SplitContainer1.IsSplitterFixed = True
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1MinSize = 12
+        ' Me.SplitContainer1.Panel1.MinimumSize = New Size(12, 333)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ButtOpenTabs)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer3)
+        Me.SplitContainer1.Panel2MinSize = 68
+        Me.SplitContainer1.Size = New System.Drawing.Size(352, 333)
+        Me.SplitContainer1.SplitterDistance = 12
+        Me.SplitContainer1.SplitterWidth = 1
+        Me.SplitContainer1.TabIndex = 0
+        '
+        'ButtOpenTabs
+        '
+        Me.ButtOpenTabs.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtOpenTabs.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ButtOpenTabs.Location = New System.Drawing.Point(0, 0)
+        Me.ButtOpenTabs.Margin = New System.Windows.Forms.Padding(0)
+        Me.ButtOpenTabs.Name = "ButtOpenTabs"
+        Me.ButtOpenTabs.Size = New System.Drawing.Size(12, 333)
+        Me.ButtOpenTabs.TabIndex = 6
+        Me.ButtOpenTabs.TabStop = False
+        Me.ButtOpenTabs.Tag = "False"
+        Me.ButtOpenTabs.Text = "<"
+        Me.ToolTip1.SetToolTip(Me.ButtOpenTabs, "Show the tabs manager")
+        Me.ButtOpenTabs.UseVisualStyleBackColor = False
+        '
+        'SplitContainer3
+        '
+        Me.SplitContainer3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
+        Me.SplitContainer3.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer3.Name = "SplitContainer3"
+        Me.SplitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal
+        '
+        'SplitContainer3.Panel1
+        '
+        Me.SplitContainer3.Panel1.Controls.Add(Me.TabControl1)
+        '
+        'SplitContainer3.Panel2
+        '
+        Me.SplitContainer3.Panel2.Controls.Add(Me.SplitContainer4)
+        Me.SplitContainer3.Panel2.Padding = New System.Windows.Forms.Padding(4, 0, 4, 6)
+        Me.SplitContainer3.Size = New System.Drawing.Size(300, 333)
+        Me.SplitContainer3.SplitterDistance = 300
+        Me.SplitContainer3.SplitterWidth = 1
+        Me.SplitContainer3.TabIndex = 0
+        Me.SplitContainer3.IsSplitterFixed = True
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(300, 300)
+        Me.TabControl1.TabIndex = 0
+        '
+        'SplitContainer4
+        '
+        Me.SplitContainer4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer4.Location = New System.Drawing.Point(4, 0)
+        Me.SplitContainer4.Name = "SplitContainer4"
+        Me.SplitContainer4.IsSplitterFixed = True
+        '
+        'SplitContainer4.Panel1
+        '
+        Me.SplitContainer4.Panel1.Controls.Add(Me.SplitContainer6)
+        '
+        'SplitContainer4.Panel2
+        '
+        Me.SplitContainer4.Panel2.Controls.Add(Me.SplitContainer5)
+        Me.SplitContainer4.Size = New System.Drawing.Size(292, 26)
+        Me.SplitContainer4.SplitterDistance = 146
+        Me.SplitContainer4.TabIndex = 0
+        '
+        'SplitContainer6
+        '
+        Me.SplitContainer6.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer6.IsSplitterFixed = True
+        Me.SplitContainer6.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer6.Name = "SplitContainer6"
+        Me.SplitContainer6.IsSplitterFixed = True
+        '
+        'SplitContainer6.Panel1
+        '
+        Me.SplitContainer6.Panel1.Controls.Add(Me.ButtFile)
+        Me.SplitContainer6.Panel1MinSize = 10
+        '
+        'SplitContainer6.Panel2
+        '
+        Me.SplitContainer6.Panel2.Controls.Add(Me.SplitContainer7)
+        Me.SplitContainer6.Size = New System.Drawing.Size(146, 26)
+        Me.SplitContainer6.SplitterDistance = 35
+        Me.SplitContainer6.TabIndex = 0
+        '
+        'ButtFile
+        '
+        Me.ButtFile.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtFile.Location = New System.Drawing.Point(0, 0)
+        Me.ButtFile.Name = "ButtFile"
+        Me.ButtFile.Size = New System.Drawing.Size(30, 26)
+        Me.ButtFile.TabIndex = 4
+        Me.ButtFile.Text = "File"
+        Me.ToolTip1.SetToolTip(Me.ButtFile, "Select the file")
+        Me.ButtFile.UseVisualStyleBackColor = True
+        '
+        'SplitContainer7
+        '
+        Me.SplitContainer7.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer7.IsSplitterFixed = True
+        Me.SplitContainer7.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer7.Name = "SplitContainer7"
+        Me.SplitContainer7.IsSplitterFixed = True
+        '
+        'SplitContainer7.Panel1
+        '
+        Me.SplitContainer7.Panel1.Controls.Add(Me.ButtDel)
+        '
+        'SplitContainer7.Panel2
+        '
+        Me.SplitContainer7.Panel2.Controls.Add(Me.ButtAdd)
+        Me.SplitContainer7.Size = New System.Drawing.Size(112, 26)
+        Me.SplitContainer7.SplitterDistance = 55
+        Me.SplitContainer7.TabIndex = 0
+        '
+        'ButtDel
+        '
+        Me.ButtDel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtDel.Location = New System.Drawing.Point(0, 0)
+        Me.ButtDel.Name = "ButtDel"
+        Me.ButtDel.Size = New System.Drawing.Size(55, 26)
+        Me.ButtDel.TabIndex = 3
+        Me.ButtDel.Text = "Del"
+        Me.ToolTip1.SetToolTip(Me.ButtDel, "Delete a brick of the box")
+        Me.ButtDel.UseVisualStyleBackColor = True
+        '
+        'ButtAdd
+        '
+        Me.ButtAdd.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtAdd.Location = New System.Drawing.Point(0, 0)
+        Me.ButtAdd.Name = "ButtAdd"
+        Me.ButtAdd.Size = New System.Drawing.Size(53, 26)
+        Me.ButtAdd.TabIndex = 2
+        Me.ButtAdd.Text = "Add"
+        Me.ToolTip1.SetToolTip(Me.ButtAdd, "Add a new brick of components")
+        Me.ButtAdd.UseVisualStyleBackColor = True
+        '
+        'SplitContainer5
+        '
+        Me.SplitContainer5.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer5.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer5.Name = "SplitContainer5"
+        Me.SplitContainer5.IsSplitterFixed = True
+        '
+        'SplitContainer5.Panel1
+        '
+        Me.SplitContainer5.Panel1.Controls.Add(Me.ButtCancel)
+        '
+        'SplitContainer5.Panel2
+        '
+        Me.SplitContainer5.Panel2.Controls.Add(Me.ButtAccept)
+        Me.SplitContainer5.Size = New System.Drawing.Size(142, 26)
+        Me.SplitContainer5.SplitterDistance = 68
+        Me.SplitContainer5.TabIndex = 0
+        '
+        'ButtCancel
+        '
+        Me.ButtCancel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtCancel.Location = New System.Drawing.Point(0, 0)
+        Me.ButtCancel.Name = "ButtCancel"
+        Me.ButtCancel.Size = New System.Drawing.Size(68, 26)
+        Me.ButtCancel.TabIndex = 1
+        Me.ButtCancel.Text = "Cancel"
+        Me.ToolTip1.SetToolTip(Me.ButtCancel, "Close the box")
+        Me.ButtCancel.UseVisualStyleBackColor = True
+        '
+        'ButtAccept
+        '
+        Me.ButtAccept.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.ButtAccept.Location = New System.Drawing.Point(0, 0)
+        Me.ButtAccept.Name = "ButtAccept"
+        Me.ButtAccept.Size = New System.Drawing.Size(70, 26)
+        Me.ButtAccept.TabIndex = 0
+        Me.ButtAccept.Text = "Accept"
+        Me.ToolTip1.SetToolTip(Me.ButtAccept, "Take a brick of components to the canvas")
+        Me.ButtAccept.UseVisualStyleBackColor = True
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.FileName = ""
+        Me.OpenFileDialog1.Filter = "gh file|*.gh|ghx file|*.ghx"
+        '
+        'Form1
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(310, 333)
+        Me.MinimumSize = New System.Drawing.Size(200, 214)
+        Me.Controls.Add(Me.SplitContainer1)
+        Me.DoubleBuffered = True
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable
+        Me.Icon = My.Resources.Icon24x24
+        Me.ShowInTaskbar = True
+        Me.ShowIcon = False
+        Me.Name = "Form1"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
+        Me.Text = "    Brick Box "
+        Me.Owner = Grasshopper.Instances.DocumentEditor
+        Me.HelpButton = True
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.SplitContainer3.Panel1.ResumeLayout(False)
+        Me.SplitContainer3.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer3.ResumeLayout(False)
+        Me.SplitContainer4.Panel1.ResumeLayout(False)
+        Me.SplitContainer4.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer4.ResumeLayout(False)
+        Me.SplitContainer6.Panel1.ResumeLayout(False)
+        Me.SplitContainer6.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer6, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer6.ResumeLayout(False)
+        Me.SplitContainer7.Panel1.ResumeLayout(False)
+        Me.SplitContainer7.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer7, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer7.ResumeLayout(False)
+        Me.SplitContainer5.Panel1.ResumeLayout(False)
+        Me.SplitContainer5.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer5, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer5.ResumeLayout(False)
+        Me.ResumeLayout(False)
+
+    End Sub
+
+    Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents ButtOpenTabs As Button
+    Friend WithEvents SplitContainer3 As SplitContainer
+    Friend WithEvents SplitContainer4 As SplitContainer
+    Friend WithEvents SplitContainer6 As SplitContainer
+    Friend WithEvents ButtFile As Button
+    Friend WithEvents SplitContainer7 As SplitContainer
+    Friend WithEvents ButtDel As Button
+    Friend WithEvents ButtAdd As Button
+    Friend WithEvents SplitContainer5 As SplitContainer
+    Friend WithEvents ButtCancel As Button
+    Friend WithEvents ButtAccept As Button
+    Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents TabControl1 As TabControl
+    Friend WithEvents OpenFileDialog1 As OpenFileDialog
 #End Region
 
 #Region "Buttons"
@@ -81,30 +408,25 @@ Public Class Form1
 
     Private Sub ButtAccept_MouseClick(sender As Object, e As MouseEventArgs) Handles ButtAccept.MouseClick
         If (e.Button = MouseButtons.Left) Then
+            AskToSave = False
             If (Caja.Seleccionado IsNot Nothing) Then
                 Me.Close()
-                Me.Dispose()
                 Caja.Seleccionado.BrickToCanvas()
-                CloseBoxAtt()
             Else
                 Dim result As DialogResult = MessageBox.Show("No brick selected. You want to close the box?", "", MessageBoxButtons.YesNo)
                 If (result = DialogResult.Yes) Then
                     Me.Close()
-                    Me.Dispose()
-                    CloseBoxAtt()
                 Else
-                    Return
+                    Exit Sub
                 End If
             End If
-
         End If
     End Sub
 
     Private Sub ButtCancel_MouseClick(sender As Object, e As MouseEventArgs) Handles ButtCancel.MouseClick
         If (e.Button = MouseButtons.Left) Then
+            AskToSave = True
             Me.Close()
-            Me.Dispose()
-            CloseBoxAtt()
         End If
     End Sub
 
@@ -131,14 +453,28 @@ Public Class Form1
 
     Private Sub ButtFile_MouseClick(sender As Object, e As MouseEventArgs) Handles ButtFile.MouseClick
         If (e.Button = MouseButtons.Left) Then
+            If (Me.Caja.HaCambiado) Then
+                Dim result As DialogResult = MessageBox.Show("Saves changes?", "", MessageBoxButtons.YesNo)
+                If (result = DialogResult.Yes) Then Caja.SaveToFile()
+            End If
             Caja.OpenNewFile()
-        End If
+            End If
     End Sub
 
     Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+
         If (Caja.Display IsNot Nothing) Then Caja.HidePreview()
+        If (Me.Caja.HaCambiado) Then
+            If (AskToSave) Then
+                Dim result As DialogResult = MessageBox.Show("Saves changes?", "", MessageBoxButtons.YesNo)
+                If (result = DialogResult.Yes) Then Caja.SaveToFile()
+            Else
+                Caja.SaveToFile()
+            End If
+        End If
+        Me.Dispose()
         CloseBoxAtt()
-        Caja.SaveToFile()
+
     End Sub
 
     Private Sub Form1_HelpButtonClicked(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles MyBase.HelpButtonClicked
@@ -146,17 +482,19 @@ Public Class Form1
         MessageBox.Show("Gh Brick Box is an UI that serves to manage pieces of definitions," & vbCrLf &
                         "geometry, or components with added parameters, all within a component." & vbCrLf &
                         "" & vbCrLf &
-"Requires to have loaded a gh file (*.gh/*.ghx) to read and store binary data. All changes are saved when you close the box, serialized within the gh file." & vbCrLf &
-"Note that the file becomes unusable, because if you save the document from gh you will lose all data." & vbCrLf &
+"Requires to have loaded a gh file (*.gh/*.ghx) to read and store binary data. Note that the file becomes unusable, because if you save the document from gh you will lose all data." & vbCrLf &
                         "" & vbCrLf &
 "*How to use it*" & vbCrLf &
-"First you need to have loaded a file to read or write brick data. Use the |File button| to open a new file." & vbCrLf &
-"When you open a brick data file, will appear tabs and bricks.You can browse, select the item you want and press |Accept button| to take it to the canvas." & vbCrLf &
-"Pressing right click on a brick, a window with the enlarge image is displayed." & vbCrLf &
+"First you need to have loaded a file to read or write BrickBox data. Use the |File button| to open a new file." & vbCrLf &
+"When you open a file with BrickBox data, will appear tabs and bricks. You can browse, select the item you want and press |Accept button| to insert it to the canvas." & vbCrLf &
+"Pressing right click on a brick, a window with the enlarge image is displayed. From this window you can change the name, tab or image of a brick." & vbCrLf &
 "You can manage the tabs from the |left side button|, selecting an edit mode, filling text boxes and pressing accept to make changes." & vbCrLf &
 "To add a new brick in the box, press the |Add button| and a pop-up window will appear. Select the components on the canvas which want to add," & vbCrLf &
 "the image of the brick may be the screenshot of the canvas or rhino viewport. Add a name for the new brick in the text box and press done." & vbCrLf &
 "" & vbCrLf &
+"You can drag a brick from one box to another to add it to the target box pressing CTRL key while dragging. You can also drag to the box a gh file which contains BrickBox data for attaching all its contents to the target box." & vbCrLf &
+"Moving the mouse wheel and pressing the SHIFT key you can change the size of the bricks." & vbCrLf &
+        "" & vbCrLf &
 "Right-clicking on the component, you can access to contact and development information.", "Help")
         e.Cancel = True
     End Sub
@@ -512,6 +850,7 @@ Public Class Brick
         _form1 = Parent
         Nombre = SuNombre
         Pestaña = SuPestaña
+        Me.Tag = _form1.Caja.NombresPestañas.IndexOf(SuPestaña)
         Indice = _form1.Caja.NombresPestañas.Count
         Data = CaptureData()
         If (Data Is Nothing) Then
@@ -530,23 +869,41 @@ Public Class Brick
     Public Sub New(Parent As Form1, reader As GH_IReader)
         MyBase.New()
         _form1 = Parent
-        Me.Pestaña = reader.GetString(NameOfTab, 0)
+        Try
+            Me.Pestaña = reader.GetString(NameOfTab, 0)
         Me.Tag = reader.GetInt32(IndexOfTab, 1)
         Me.Nombre = reader.GetString(NameOfBrick, 2)
         Me.Indice = reader.GetInt32(IndexOfBrick, 3)
         Me.Data = reader.GetByteArray(BinaryName, 4)
-        Me.IMG = reader.GetDrawingBitmap(IMGName, 5)
+            Me.IMG = reader.GetDrawingBitmap(IMGName, 5)
+        Catch ex As Exception
+            MessageBox.Show("Could not read data from this file")
+        End Try
+        Me.PerformControl()
+    End Sub
+
+    Public Sub New(Parent As Form1, SuNombre As String, SuPestaña As String, SuIndice As Integer, SuIMG As Bitmap, SusDatos As Byte())
+        MyBase.New()
+        _form1 = Parent
+        Nombre = SuNombre
+        Pestaña = SuPestaña
+        Me.Tag = _form1.Caja.NombresPestañas.IndexOf(SuPestaña)
+        Indice = SuIndice
+        IMG = SuIMG
+        Data = SusDatos
         Me.PerformControl()
     End Sub
 
     Private Sub PerformControl()
-        Me.Size = New Size(60, 60)
+        Me.Size = New Size(My.Settings.BrickSize, My.Settings.BrickSize)
         Me.Name = "PictureBox_" & Nombre
         Me.Margin = New Padding(3)
         Me.SizeMode = PictureBoxSizeMode.Zoom
         Me.Image = IMG
+
         _form1.ToolTip1.SetToolTip(Me, Me.Nombre)
         AddHandler Me.MouseClick, AddressOf Me.SelectBrick
+        AddHandler Me.MouseDown, AddressOf Me.DragBrick
     End Sub
 #End Region
 
@@ -635,26 +992,29 @@ Public Class Brick
     End Sub
 
     Public Sub DeleteBrick()
-        Dim panel As FlowLayoutPanel = DirectCast(_form1.TabControl1.SelectedTab.Controls(0), FlowLayoutPanel)
-        For i As Int32 = 0 To panel.Controls.Count - 1
-            Dim b As Brick = DirectCast(panel.Controls(i), Brick)
-            If (b Is Nothing) Then Continue For
-            If (b.Nombre.Equals(Me.Nombre)) Then
-                b.Dispose()
-                Me.Dispose()
-                _form1.Caja.Seleccionado = Nothing
-                _form1.Caja.NombresBloques.RemoveAt(_form1.Caja.NombresBloques.IndexOf(b.Nombre))
-                If (_form1.Caja.Display IsNot Nothing) Then _form1.Caja.HidePreview()
-                If (Convert.ToBoolean(_form1.ButtOpenTabs.Tag)) Then _form1.TabsToTree()
-                Return
-                Exit For
-            End If
-        Next
+        Dim bloque As Brick = _form1.Caja.FindBrick(Me.Nombre, Me.Pestaña)
+        If (bloque Is Nothing) Then Exit Sub
+        bloque.Dispose()
+        _form1.Caja.Seleccionado = Nothing
+        _form1.Caja.NombresBloques.RemoveAt(_form1.Caja.NombresBloques.IndexOf(bloque.Nombre))
+        If (_form1.Caja.Display IsNot Nothing) Then _form1.Caja.HidePreview()
+        If (Convert.ToBoolean(_form1.ButtOpenTabs.Tag)) Then _form1.TabsToTree()
+        _form1.Caja.HaCambiado = True
     End Sub
 
     Public Function IsValid() As Boolean
         Return Me.Nombre IsNot Nothing AndAlso Me.Data IsNot Nothing AndAlso Me.IMG IsNot Nothing
     End Function
+
+    Private Sub DragBrick(Sender As Object, e As MouseEventArgs)
+        If (e.Button = MouseButtons.Left) Then
+            Dim keyboard As New Microsoft.VisualBasic.Devices.Keyboard
+            If (keyboard.CtrlKeyDown) Then
+                Me.DoDragDrop(Sender, DragDropEffects.Copy)
+            End If
+
+        End If
+    End Sub
 
 #End Region
 
@@ -689,7 +1049,7 @@ Public Class BrickBox
     Public NombresBloques As New List(Of String)
     Private _Seleccionado As Brick
     Public Display As Preview
-    Private HaCambiado As Boolean
+    Public HaCambiado As Boolean
 
     Sub New(Parent As Form1)
         _Form1 = Parent
@@ -709,32 +1069,46 @@ Public Class BrickBox
     End Property
 
 #Region "BricksManager"
+
     Public Sub AddBrick(Bloque As Brick)
 
         If (NombresBloques.Contains(Bloque.Nombre)) Then
-            MessageBox.Show("Already exists a brick with this name, try another name.")
-            Return
+            MessageBox.Show("Already exists a brick with name """ & Bloque.Nombre & """.", "")
+            Exit Sub
         End If
+        Dim tab As TabPage = FindTab(Bloque.Pestaña)
+        If (tab Is Nothing) Then
+            MessageBox.Show("The brick """ & Bloque.Nombre & """ has a tab that does Not exist In this box.")
+            Exit Sub
+        End If
+        tab.Controls(0).Controls.Add(Bloque)
+        NombresBloques.Add(Bloque.Nombre)
+        If (Convert.ToBoolean(_Form1.ButtOpenTabs.Tag)) Then _Form1.TabsToTree()
+        HaCambiado = True
+    End Sub
 
-        Dim i As New Integer
-        For i = 0 To _Form1.TabControl1.TabPages.Count - 1
-            Dim tab As TabPage = _Form1.TabControl1.TabPages.Item(i)
-            If (tab.Name.Equals(Bloque.Pestaña)) Then
-                NombresBloques.Add(Bloque.Nombre)
-                tab.Controls(0).Controls.Add(Bloque)
-                If (Convert.ToBoolean(_Form1.ButtOpenTabs.Tag)) Then _Form1.TabsToTree()
-                HaCambiado = True
-                Return
-                Exit For
-            End If
-        Next
+    Public Sub ChangeTabOfBrick(Bloque As Brick, Pestaña As String)
+        If (Bloque.Pestaña.Equals(Pestaña)) Then Exit Sub
 
+        Dim tab As TabPage = FindTab(Pestaña)
+        If (tab Is Nothing) Then
+            MessageBox.Show("The tab """ & Pestaña & """ does Not exist In this box.")
+            Exit Sub
+        End If
+        Dim bloqueCopia As New Brick(_Form1, Bloque.Nombre, Pestaña, Bloque.Indice, Bloque.IMG, Bloque.Data)
+        FindBrick(Bloque.Nombre, Bloque.Pestaña).Dispose()
+        _Form1.TabControl1.SelectedTab = tab
+        tab.Controls(0).Controls.Add(bloqueCopia)
+        tab.Controls(0).Refresh()
+        Seleccionado = bloqueCopia
+        If (Convert.ToBoolean(_Form1.ButtOpenTabs.Tag)) Then _Form1.TabsToTree()
+        HaCambiado = True
     End Sub
 
     Public Sub DeleteBrick()
         If (Seleccionado Is Nothing) Then Return
         If Not (NombresBloques.Contains(Seleccionado.Nombre)) Then
-            MessageBox.Show("There is no brick with this name")
+            MessageBox.Show("There Is no brick With this name")
             Return
         End If
         If (Display IsNot Nothing) Then Display.Dispose()
@@ -764,9 +1138,9 @@ Public Class BrickBox
             DeSelect()
             Bloque.BorderStyle = BorderStyle.FixedSingle
             _Seleccionado = Bloque
-            If (Display IsNot Nothing) Then Display.ChangeImage(Bloque.IMG)
+            If (Display IsNot Nothing) Then Display.UpdateBrick(Bloque)
         Else
-            _Seleccionado = Nothing
+                _Seleccionado = Nothing
         End If
     End Sub
 
@@ -780,9 +1154,9 @@ Public Class BrickBox
 
     Public Sub ShowMe(Bloque As Brick)
         If (Display Is Nothing) Then
-            Display = New Preview(_Form1, Bloque.IMG)
+            Display = New Preview(Bloque)
         Else
-            Display.ChangeImage(Bloque.IMG)
+            Display.UpdateBrick(Bloque)
         End If
     End Sub
 
@@ -792,6 +1166,55 @@ Public Class BrickBox
             Display = Nothing
         End If
     End Sub
+
+    Private Sub DropBrick(sender As Object, e As DragEventArgs)
+
+        Dim dragged As Brick = e.Data.GetData(GetType(Brick))
+        If (dragged Is Nothing) Then
+            Dim Files As String() = e.Data.GetData(DataFormats.FileDrop)
+            If (Files IsNot Nothing) Then
+                For Each file As String In Files
+                    If (System.IO.Path.GetExtension(file).Equals(".gh")) Or (System.IO.Path.GetExtension(file).Equals(".ghx")) Then
+                        AppendFile(file)
+                    End If
+                Next
+            End If
+            Exit Sub
+        End If
+
+        If (dragged._form1.Equals(Me._Form1)) Then
+            Exit Sub
+        End If
+        If (NombresBloques.Contains(dragged.Nombre)) Then
+            MessageBox.Show("This box allready contains a brick With this name.")
+            Exit Sub
+        End If
+        Dim newbrick As New Brick(_Form1, dragged.Nombre, _Form1.TabControl1.SelectedTab.Name, NombresBloques.Count, dragged.IMG, dragged.Data)
+        Me.AddBrick(newbrick)
+
+    End Sub
+
+    Private Sub DropEnter(sender As Object, e As DragEventArgs)
+        e.Effect = DragDropEffects.All
+    End Sub
+
+    Private Sub ResizeBricks(sender As Object, e As MouseEventArgs)
+        Dim keyboard As New Microsoft.VisualBasic.Devices.Keyboard
+
+        If (keyboard.ShiftKeyDown AndAlso e.Delta <> 0) Then
+            For Each t As TabPage In _Form1.TabControl1.TabPages
+                For Each b As Brick In t.Controls(0).Controls
+                    Dim valor As Integer = Math.Max(10, b.Width + e.Delta * 0.05)
+                    b.Size = New Size(valor, valor)
+                    My.Settings.BrickSize = valor
+                    Rhino.RhinoApp.WriteLine("BrickBox size =  " & valor & " px")
+                Next
+            Next
+            _Form1.TabControl1.SelectedTab.Refresh()
+            My.Settings.Save()
+        End If
+
+    End Sub
 #End Region
 
 #Region "TabsManager"
@@ -799,7 +1222,7 @@ Public Class BrickBox
     Public Sub CreateNewTab(SuNombre As String)
 
         If (NombresPestañas.Contains(SuNombre)) Then
-            MessageBox.Show("Already exists a tab with this name, try another")
+            MessageBox.Show("Already exists a tab With this name, try another")
             Return
         End If
 
@@ -823,8 +1246,13 @@ Public Class BrickBox
         panel.Name = "FlowLayoutPanel1"
         panel.Size = New System.Drawing.Size(284, 273)
         panel.TabIndex = 0
+        panel.AllowDrop = True
+
         AddHandler panel.MouseClick, AddressOf Me.DeSelect
         AddHandler panel.MouseClick, AddressOf Me.HidePreview
+        AddHandler panel.DragDrop, AddressOf Me.DropBrick
+        AddHandler panel.DragEnter, AddressOf Me.DropEnter
+        AddHandler panel.MouseWheel, AddressOf Me.ResizeBricks
 
         Pestaña.Controls.Add(panel)
 
@@ -836,11 +1264,11 @@ Public Class BrickBox
     Public Sub DeleteTab(SuNombre As String)
 
         If Not (NombresPestañas.Contains(SuNombre)) Then
-            MessageBox.Show("There is no tab with this name.")
+            MessageBox.Show("There Is no tab with this name.")
             Return
         End If
 
-        Dim result As DialogResult = MessageBox.Show("Are you sure you want to delete the """ & SuNombre & """ tab and all its content?", "", MessageBoxButtons.YesNo)
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to delete the """ & SuNombre & """ tab And all its content?", "", MessageBoxButtons.YesNo)
         If (result = DialogResult.Yes) Then
             For Each tab As TabPage In _Form1.TabControl1.TabPages
                 If (tab.Name.Equals(SuNombre)) Then
@@ -859,7 +1287,7 @@ Public Class BrickBox
     Public Sub RenameTab(SuNombre As String, NuevoNombre As String)
 
         If Not (NombresPestañas.Contains(SuNombre)) Then
-            MessageBox.Show("There is no tab with this name.")
+            MessageBox.Show("There Is no tab with this name.")
             Return
         End If
         If (NombresPestañas.Contains(NuevoNombre)) Then
@@ -879,6 +1307,52 @@ Public Class BrickBox
         Next
     End Sub
 
+#End Region
+
+#Region "Find"
+    Public Function FindBrick(SuNombre As String, SuPestaña As String) As Brick
+        Dim tab As TabPage = FindTab(SuPestaña)
+        If (tab Is Nothing) Then
+            MessageBox.Show("The brick """ & SuNombre & """ has a tab that does Not exist in this box.")
+            Return Nothing
+            Exit Function
+        End If
+        Dim bloque As Brick = Nothing
+        For Each b As Brick In tab.Controls(0).Controls
+            If (b.Nombre.Equals(SuNombre)) Then
+                bloque = b
+                Exit For
+            End If
+        Next
+        Return bloque
+    End Function
+
+    Public Function FindBrick(SuNombre As String) As Brick
+        Dim bloque As Brick = Nothing
+        Dim done As Boolean = False
+        For Each tab As TabPage In _Form1.TabControl1.TabPages
+            If (done) Then Exit For
+            For Each b As Brick In tab.Controls(0).Controls
+                If (b.Nombre.Equals(SuNombre)) Then
+                    bloque = b
+                    done = True
+                    Exit For
+                End If
+            Next
+        Next
+        Return bloque
+    End Function
+
+    Public Function FindTab(SuNombre As String) As TabPage
+        Dim thistab As TabPage = Nothing
+        For Each tab As TabPage In _Form1.TabControl1.TabPages
+            If (tab.Name.Equals(SuNombre)) Then
+                thistab = tab
+                Exit For
+            End If
+        Next
+        Return thistab
+    End Function
 #End Region
 
 #Region "Serial"
@@ -925,6 +1399,8 @@ Public Class BrickBox
             Next
         Next
         archive.WriteToFile(File, True, True)
+        My.Settings.FilePath = File
+        My.Settings.Save()
     End Sub
 
     Public Sub LoadFromFile(File As String)
@@ -953,7 +1429,7 @@ Public Class BrickBox
         '2. Get BrickBox chunk.
         Dim RootBox As GH_Chunk = root.FindChunk(NameBox)
         If (RootBox Is Nothing) Then
-            MessageBox.Show("The file is empty." & vbCrLf & "Begins creating a tab in order to add blocks," & vbCrLf & "from the left side button.")
+            MessageBox.Show("The file is empty." & vbCrLf & "Begins creating a tab in order to add blocks, " & vbCrLf & "from the left side button.")
             Return
         End If
         '3. Get tab chunks.
@@ -968,6 +1444,48 @@ Public Class BrickBox
             Next
         Next
         HaCambiado = False
+    End Sub
+
+    Public Sub AppendFile(File As String)
+        '0. Read file.
+        Dim archive As New GH_Archive()
+        Try
+            archive.ReadFromFile(File)
+        Catch ex As Exception
+            MessageBox.Show("This is not a valid file.")
+        End Try
+        '1. Get root.
+        Dim root As GH_Chunk = archive.GetRootNode()
+        If (root Is Nothing) Then
+            MessageBox.Show("File has no root")
+            Return
+        End If
+        '2. Get BrickBox chunk.
+        Dim RootBox As GH_Chunk = root.FindChunk(NameBox)
+        If (RootBox Is Nothing) Then
+            MessageBox.Show("The file is empty, nothing to append.")
+            Exit Sub
+        End If
+        Dim log As String = "The following bricks are not added by duplication of name: "
+        '3. Get tab chunks.
+        For i As Int32 = 0 To RootBox.ChunkCount - 1
+            Dim ChunkTab As GH_Chunk = RootBox.Chunks(i)
+            If Not (NombresPestañas.Contains(ChunkTab.Name)) Then Me.CreateNewTab(ChunkTab.Name)
+            '4. Get brick chunks.
+            For j As Int32 = 0 To ChunkTab.ChunkCount - 1
+                Dim chunkBrick As GH_Chunk = ChunkTab.Chunks(j)
+                Dim b As New Brick(_Form1, chunkBrick)
+                If Not (NombresBloques.Contains(b.Nombre)) Then
+                    Me.AddBrick(b)
+                Else
+                    log = log & vbCrLf & "Name: " & b.Nombre & ", tab: " & b.Pestaña
+                End If
+            Next
+        Next
+        If Not (log.Equals("The following bricks are not added by duplication of name: ")) Then
+            MessageBox.Show(log, "Log")
+        End If
+        HaCambiado = True
     End Sub
 
     Public Sub OpenNewFile()
@@ -986,49 +1504,393 @@ Public Class BrickBox
 
 End Class
 
+#Region "OtherWindows"
 Public Class Preview
     Inherits System.Windows.Forms.Form
 
-    Public _Form1 As Form1
-    Public Imagen As Image
-    Private Picbox As System.Windows.Forms.PictureBox
+    Private _Form1 As Form1
+    Private ThisBrick As Brick
 
-    Sub New(Parent As Form1, IMG As Image)
-        _Form1 = Parent
-        Imagen = IMG
+    Sub New(Bloque As Brick)
+        _Form1 = Bloque._form1
         InitializeComponent()
+        UpdateBrick(Bloque)
+        Dim ratio As Double = Bloque.IMG.Width / Bloque.IMG.Height
+        Me.Size = New System.Drawing.Size(_Form1.Height * ratio, _Form1.Height)
+        Me.Location = New System.Drawing.Point(Bloque._form1.Location.X + Bloque._form1.Width, Bloque._form1.Location.Y)
         Me.Show()
     End Sub
 
-    Public Sub ChangeImage(NewImage As Image)
-        Me.Imagen = NewImage
-        Picbox.Image = NewImage
-        Me.Refresh()
+#Region "Sub"
+
+    Public Sub UpdateBrick(Bloque As Brick)
+        ThisBrick = Bloque
+        Me.TextBoxName.Text = Bloque.Nombre
+        Me.ComboBoxTab.Items.Clear()
+        For Each tab As String In _Form1.Caja.NombresPestañas
+            Me.ComboBoxTab.Items.Add(tab)
+        Next
+        Me.ComboBoxTab.Text = ThisBrick.Pestaña
+        Me.PictureBox1.Image = Bloque.IMG
+        Me.PictureBox1.Refresh()
     End Sub
 
-    Private Sub Form1_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
-        _Form1.Caja.Display = Nothing
+    Private Sub TextBoxName_KeyDown(sender As Object, e As KeyEventArgs) Handles TextBoxName.KeyDown
+        If (e.KeyCode = Keys.Enter) Then
+            If Not (Me.TextBoxName.Text.Equals(ThisBrick.Nombre)) Then
+                Dim newname As String = Me.TextBoxName.Text
+                Dim bloque As Brick = _Form1.Caja.FindBrick(ThisBrick.Nombre, ThisBrick.Pestaña)
+                _Form1.Caja.NombresBloques(_Form1.Caja.NombresBloques.IndexOf(ThisBrick.Nombre)) = newname
+                bloque.Nombre = newname
+                _Form1.ToolTip1.SetToolTip(bloque, newname)
+                bloque.Refresh()
+                If (Convert.ToBoolean(_Form1.ButtOpenTabs.Tag)) Then _Form1.TabsToTree()
+                _Form1.Caja.HaCambiado = True
+                'MessageBox.Show("Name changed.")
+            Else
+                MessageBox.Show("Already exists a brick with this name.")
+            End If
+        End If
     End Sub
 
+    Private Sub ComboBoxTab_KeyDown(sender As Object, e As KeyEventArgs) Handles ComboBoxTab.KeyDown
+        If (e.KeyCode = Keys.Enter) Then
+            Dim newtab As String = Me.ComboBoxTab.SelectedText
+            If Not (Me.ComboBoxTab.SelectedText.Equals(ThisBrick.Pestaña)) AndAlso (_Form1.Caja.NombresPestañas.Contains(newtab)) Then
+                Dim bloque As Brick = _Form1.Caja.FindBrick(ThisBrick.Nombre, ThisBrick.Pestaña)
+
+                _Form1.Caja.ChangeTabOfBrick(ThisBrick, newtab)
+                'MessageBox.Show("Tab changed.")
+            End If
+        End If
+    End Sub
+
+    Private Sub ButtLoadPic_MouseClick(sender As Object, e As MouseEventArgs) Handles ButtLoadPic.MouseClick
+        If (e.Button = MouseButtons.Left) Then
+            Try
+                If (Me.OpenFileDialog1.ShowDialog = DialogResult.OK) Then
+                    Dim img As New Bitmap(Me.OpenFileDialog1.FileName)
+                    Me.PictureBox1.Image = img
+                    Me.ThisBrick.IMG = img
+                    Dim bloque As Brick = _Form1.Caja.FindBrick(ThisBrick.Nombre, ThisBrick.Pestaña)
+                    bloque.IMG = img
+                    bloque.Image = img
+                    bloque.Refresh()
+                    _Form1.Caja.HaCambiado = True
+                    ' MessageBox.Show("Image changed.")
+                End If
+            Catch ex As Exception
+                MessageBox.Show("The selected file Is Not a valid image type.")
+            End Try
+        End If
+    End Sub
+
+    Private Sub Button1_MouseClick(sender As Object, e As MouseEventArgs) Handles Button1.MouseClick
+        If (e.Button = MouseButtons.Left) Then
+            Me.SaveFileDialog1.FileName = ThisBrick.Nombre & "_BrickImage"
+            If (Me.SaveFileDialog1.ShowDialog = DialogResult.OK) Then
+                Dim img As Bitmap = ThisBrick.Image
+                img.Save(Me.SaveFileDialog1.FileName)
+                MsgBox(Me.SaveFileDialog1.FileName)
+            End If
+        End If
+    End Sub
+
+    Private Sub Preview_FormClosed(sender As Object, e As FormClosedEventArgs) Handles MyBase.FormClosed
+        ThisBrick._form1.Caja.Display = Nothing
+    End Sub
+
+    Private Sub BrickAtt_HelpButtonClicked(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles MyBase.HelpButtonClicked
+        MessageBox.Show("You can rename the brick typing in the text box a new name and press Enter." & vbCrLf &
+"You can change the tab selecting a new tab in the tab box and press Enter." & vbCrLf &
+"You can change the image by pressing the L button and loading a new image." & vbCrLf &
+"You can save the current image of the brick by pressing the S button.", "Help")
+        e.Cancel = True
+    End Sub
+#End Region
+
+#Region "Design"
+    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+        Try
+            If disposing AndAlso components IsNot Nothing Then
+                components.Dispose()
+            End If
+        Finally
+            MyBase.Dispose(disposing)
+        End Try
+    End Sub
+
+    Private components As System.ComponentModel.IContainer
 
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Me.LabelName = New System.Windows.Forms.Label()
+        Me.TextBoxName = New System.Windows.Forms.TextBox()
+        Me.TabLabel = New System.Windows.Forms.Label()
+        Me.ComboBoxTab = New System.Windows.Forms.ComboBox()
+        Me.ButtLoadPic = New System.Windows.Forms.Button()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
+        Me.SaveFileDialog1 = New System.Windows.Forms.SaveFileDialog()
+        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer2 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
+        Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer1.Panel1.SuspendLayout()
+        Me.SplitContainer1.Panel2.SuspendLayout()
+        Me.SplitContainer1.SuspendLayout()
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer2.Panel1.SuspendLayout()
+        Me.SplitContainer2.Panel2.SuspendLayout()
+        Me.SplitContainer2.SuspendLayout()
+        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer3.Panel1.SuspendLayout()
+        Me.SplitContainer3.Panel2.SuspendLayout()
+        Me.SplitContainer3.SuspendLayout()
+        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.SplitContainer4.Panel1.SuspendLayout()
+        Me.SplitContainer4.Panel2.SuspendLayout()
+        Me.SplitContainer4.SuspendLayout()
         Me.SuspendLayout()
-        Me.FormBorderStyle = FormBorderStyle.SizableToolWindow
-        Me.BackColor = SystemColors.ControlLightLight
-        Me.ClientSize = New Size(Imagen.Width / 2, Imagen.Height / 2)
-        Me.Location = New System.Drawing.Point(_Form1.Location.X + _Form1.Width, _Form1.Location.Y)
-        Me.TopMost = True
+        '
+        'LabelName
+        '
+        Me.LabelName.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.LabelName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.LabelName.Location = New System.Drawing.Point(0, 0)
+        Me.LabelName.Name = "LabelName"
+        Me.LabelName.Padding = New System.Windows.Forms.Padding(6, 0, 0, 8)
+        Me.LabelName.Size = New System.Drawing.Size(51, 33)
+        Me.LabelName.TabIndex = 0
+        Me.LabelName.Text = "Name: "
+        Me.LabelName.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'TextBoxName
+        '
+        Me.TextBoxName.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.TextBoxName.Dock = System.Windows.Forms.DockStyle.Top
+        Me.TextBoxName.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBoxName.Location = New System.Drawing.Point(3, 3)
+        Me.TextBoxName.Name = "TextBoxName"
+        Me.TextBoxName.Size = New System.Drawing.Size(162, 21)
+        Me.TextBoxName.TabIndex = 0
+        Me.TextBoxName.Text = ""
+        Me.ToolTip1.SetToolTip(Me.TextBoxName, "Type a new name for this brick and press Enter")
+        '
+        'TabLabel
+        '
+        Me.TabLabel.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.TabLabel.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TabLabel.Location = New System.Drawing.Point(0, 0)
+        Me.TabLabel.Name = "TabLabel"
+        Me.TabLabel.Padding = New System.Windows.Forms.Padding(3, 0, 0, 8)
+        Me.TabLabel.Size = New System.Drawing.Size(52, 33)
+        Me.TabLabel.TabIndex = 0
+        Me.TabLabel.Text = "Tab:"
+        Me.TabLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
+        'ComboBoxTab
+        '
+        Me.ComboBoxTab.BackColor = System.Drawing.SystemColors.Window
+        Me.ComboBoxTab.Dock = System.Windows.Forms.DockStyle.Top
+        Me.ComboBoxTab.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.ComboBoxTab.FormattingEnabled = True
+        Me.ComboBoxTab.Items.AddRange(New Object() {"sdfasdf", "asdf", "sdf"})
+        Me.ComboBoxTab.Location = New System.Drawing.Point(0, 1)
+        Me.ComboBoxTab.Name = "ComboBoxTab"
+        Me.ComboBoxTab.Size = New System.Drawing.Size(151, 23)
+        Me.ComboBoxTab.TabIndex = 2
+        Me.ToolTip1.SetToolTip(Me.ComboBoxTab, "Change the tab of this brick and press Enter")
+        '
+        'ButtLoadPic
+        '
+        Me.ButtLoadPic.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.ButtLoadPic.Location = New System.Drawing.Point(414, 295)
+        Me.ButtLoadPic.MaximumSize = New System.Drawing.Size(20, 20)
+        Me.ButtLoadPic.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.ButtLoadPic.Name = "ButtLoadPic"
+        Me.ButtLoadPic.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.ButtLoadPic.Size = New System.Drawing.Size(20, 20)
+        Me.ButtLoadPic.TabIndex = 4
+        Me.ButtLoadPic.TabStop = False
+        Me.ButtLoadPic.Text = "L"
+        Me.ToolTip1.SetToolTip(Me.ButtLoadPic, "Load a new image for this brick")
+        Me.ButtLoadPic.UseVisualStyleBackColor = True
+        '
+        'Button1
+        '
+        Me.Button1.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.Button1.Location = New System.Drawing.Point(388, 295)
+        Me.Button1.MaximumSize = New System.Drawing.Size(20, 20)
+        Me.Button1.MinimumSize = New System.Drawing.Size(20, 20)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(20, 20)
+        Me.Button1.TabIndex = 3
+        Me.Button1.TabStop = False
+        Me.Button1.Text = "S"
+        Me.ToolTip1.SetToolTip(Me.Button1, "Save current image")
+        Me.Button1.UseVisualStyleBackColor = True
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.PictureBox1.Location = New System.Drawing.Point(0, 0)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(440, 320)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 3
+        Me.PictureBox1.TabStop = False
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.FileName = ""
+        '
+        'SaveFileDialog1
+        '        '
+        Me.SaveFileDialog1.OverwritePrompt = True
+        Me.SaveFileDialog1.RestoreDirectory = True
+        Me.SaveFileDialog1.Filter = "*.png|*.png|*.jpg|*.jpg|*.bmp|*.bmp|*.gif|*.gif|*.tiff|*.tiff"
+        '     
+        '
+        'SplitContainer1
+        '
+        Me.SplitContainer1.BackColor = System.Drawing.SystemColors.ControlLightLight
+        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
+        Me.SplitContainer1.IsSplitterFixed = True
+        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer1.Name = "SplitContainer1"
+        Me.SplitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal
+        Me.SplitContainer1.SplitterWidth = 3
+        '
+        'SplitContainer1.Panel1
+        '
+        Me.SplitContainer1.Panel1.Controls.Add(Me.Button1)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.ButtLoadPic)
+        Me.SplitContainer1.Panel1.Controls.Add(Me.PictureBox1)
+        '
+        'SplitContainer1.Panel2
+        '
+        Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer2)
+        Me.SplitContainer1.Size = New System.Drawing.Size(440, 357)
+        Me.SplitContainer1.SplitterDistance = 320
+        Me.SplitContainer1.TabIndex = 4
+        '
+        'SplitContainer2
+        '
+        Me.SplitContainer2.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer2.IsSplitterFixed = True
+        Me.SplitContainer2.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer2.Name = "SplitContainer2"
+        '
+        'SplitContainer2.Panel1
+        '
+        Me.SplitContainer2.Panel1.Controls.Add(Me.SplitContainer3)
+        '
+        'SplitContainer2.Panel2
+        '
+        Me.SplitContainer2.Panel2.Controls.Add(Me.SplitContainer4)
+        Me.SplitContainer2.Size = New System.Drawing.Size(440, 33)
+        Me.SplitContainer2.SplitterDistance = 223
+        Me.SplitContainer2.TabIndex = 0
+        '
+        'SplitContainer3
+        '
+        Me.SplitContainer3.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer3.IsSplitterFixed = True
+        Me.SplitContainer3.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer3.Name = "SplitContainer3"
+        '
+        'SplitContainer3.Panel1
+        '
+        Me.SplitContainer3.Panel1.Controls.Add(Me.LabelName)
+        '
+        'SplitContainer3.Panel2
+        '
+        Me.SplitContainer3.Panel2.Controls.Add(Me.TextBoxName)
+        Me.SplitContainer3.Panel2.Padding = New System.Windows.Forms.Padding(3, 3, 3, 6)
+        Me.SplitContainer3.Size = New System.Drawing.Size(223, 33)
+        Me.SplitContainer3.SplitterDistance = 51
+        Me.SplitContainer3.TabIndex = 0
+        '
+        'SplitContainer4
+        '
+        Me.SplitContainer4.Dock = System.Windows.Forms.DockStyle.Fill
+        Me.SplitContainer4.IsSplitterFixed = True
+        Me.SplitContainer4.Location = New System.Drawing.Point(0, 0)
+        Me.SplitContainer4.Name = "SplitContainer4"
+        '
+        'SplitContainer4.Panel1
+        '
+        Me.SplitContainer4.Panel1.Controls.Add(Me.TabLabel)
+        '
+        'SplitContainer4.Panel2
+        '
+        Me.SplitContainer4.Panel2.Controls.Add(Me.ComboBoxTab)
+        Me.SplitContainer4.Panel2.Padding = New System.Windows.Forms.Padding(0, 1, 6, 6)
+        Me.SplitContainer4.Size = New System.Drawing.Size(213, 33)
+        Me.SplitContainer4.SplitterDistance = 52
+        Me.SplitContainer4.TabIndex = 0
+        '
+        'Preview
+        '
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
+        Me.ClientSize = New System.Drawing.Size(440, 357)
+        Me.MinimumSize = New System.Drawing.Size(200, 200)
         Me.StartPosition = FormStartPosition.Manual
-
-        Picbox = New System.Windows.Forms.PictureBox
-        Picbox.Dock = DockStyle.Fill
-        Picbox.BorderStyle = BorderStyle.None
-        Picbox.Image = Imagen
-        Picbox.SizeMode = PictureBoxSizeMode.Zoom
-
-        Me.Controls.Add(Picbox)
+        Me.Controls.Add(Me.SplitContainer1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable
+        Me.Name = "BrickAtt"
+        Me.ShowIcon = False
+        Me.ShowInTaskbar = False
+        Me.Text = ""
+        Me.HelpButton = True
+        Me.MaximizeBox = False
+        Me.MinimizeBox = False
+        Me.Owner = Grasshopper.Instances.DocumentEditor
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.Panel1.ResumeLayout(False)
+        Me.SplitContainer1.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer1.ResumeLayout(False)
+        Me.SplitContainer2.Panel1.ResumeLayout(False)
+        Me.SplitContainer2.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer2, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer2.ResumeLayout(False)
+        Me.SplitContainer3.Panel1.ResumeLayout(False)
+        Me.SplitContainer3.Panel2.ResumeLayout(False)
+        Me.SplitContainer3.Panel2.PerformLayout()
+        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer3.ResumeLayout(False)
+        Me.SplitContainer4.Panel1.ResumeLayout(False)
+        Me.SplitContainer4.Panel2.ResumeLayout(False)
+        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.SplitContainer4.ResumeLayout(False)
         Me.ResumeLayout(False)
+
     End Sub
+
+    Friend WithEvents LabelName As Label
+    Friend WithEvents TextBoxName As TextBox
+    Friend WithEvents TabLabel As Label
+    Friend WithEvents ComboBoxTab As ComboBox
+    Friend WithEvents ButtLoadPic As Button
+    Friend WithEvents Button1 As Button
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents ToolTip1 As ToolTip
+    Friend WithEvents OpenFileDialog1 As OpenFileDialog
+    Friend WithEvents SaveFileDialog1 As SaveFileDialog
+    Friend WithEvents SplitContainer1 As SplitContainer
+    Friend WithEvents SplitContainer2 As SplitContainer
+    Friend WithEvents SplitContainer3 As SplitContainer
+    Friend WithEvents SplitContainer4 As SplitContainer
+#End Region
 
 End Class
 
@@ -1222,7 +2084,7 @@ Public Class MensajeSeleccion
         Me.StartPosition = System.Windows.Forms.FormStartPosition.Manual
         Me.Location = New System.Drawing.Point(_Form1.Location.X + _Form1.Width / 2 - Me.Width / 2, _Form1.Location.Y + _Form1.Height / 2 - Me.Height / 2)
         Me.Text = "Selecting..."
-        Me.TopMost = True
+        Me.Owner = Grasshopper.Instances.DocumentEditor
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.ResumeLayout(False)
@@ -1239,445 +2101,6 @@ Public Class MensajeSeleccion
     Friend WithEvents ToolTip1 As ToolTip
 #End Region
 
-End Class
-
-Public Class BrickBoxComp
-    Inherits GH_Component
-
-    Public IsOpen As Boolean
-
-    Sub New()
-        MyBase.New("Brick Box", "Brick Box", "Stores and retrieves bricks of grasshopper definitions", "Params", "Util")
-
-    End Sub
-
-    Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
-        Get
-            Return My.Resources.icon0
-        End Get
-    End Property
-
-    Public Overrides ReadOnly Property ComponentGuid As Guid
-        Get
-            Return New Guid("{ec80e1fd-61e8-4762-8d04-95ee729ce409}")
-        End Get
-    End Property
-
-    Public Overrides Sub CreateAttributes()
-        m_attributes = New BrickBoxCompAtt(Me)
-    End Sub
-
-    Protected Overrides Sub RegisterInputParams(pManager As GH_InputParamManager)
-    End Sub
-
-    Protected Overrides Sub RegisterOutputParams(pManager As GH_OutputParamManager)
-    End Sub
-
-    Protected Overrides Sub SolveInstance(DA As IGH_DataAccess)
-    End Sub
-
-    Protected Overrides Sub AppendAdditionalComponentMenuItems(menu As ToolStripDropDown)
-        MyBase.AppendAdditionalComponentMenuItems(menu)
-        GH_DocumentObject.Menu_AppendItem(menu, "Contact", AddressOf Contact)
-    End Sub
-
-    Private PopUp As ContactPopUp
-
-    Private Sub Contact(ByVal sender As Object, ByVal e As EventArgs)
-        If (PopUp IsNot Nothing) Then PopUp.Dispose()
-        PopUp = New ContactPopUp()
-    End Sub
-
-End Class
-
-Public Class BrickBoxCompAtt
-    Inherits GH_Attributes(Of BrickBoxComp)
-
-    Public _Form1 As Form1
-
-    Sub New(owner As BrickBoxComp)
-        MyBase.New(owner)
-        owner.IsOpen = False
-    End Sub
-
-    Public Overrides Function RespondToMouseDoubleClick(sender As GH_Canvas, e As GH_CanvasMouseEvent) As GH_ObjectResponse
-        If e.Button = MouseButtons.Left AndAlso Me.Bounds.Contains(e.CanvasLocation) Then
-            If Not (Owner.IsOpen) Then
-                _Form1 = New Form1(MyBase.Owner)
-            Else
-                If (_Form1 IsNot Nothing) Then
-                    _Form1.Close()
-                    _Form1.Dispose()
-                End If
-            End If
-
-            Owner.IsOpen = Not Owner.IsOpen
-            MyBase.Owner.ExpireSolution(True)
-        End If
-        Return MyBase.RespondToMouseDoubleClick(sender, e)
-    End Function
-
-#Region "Render"
-
-    Protected Overrides Sub Layout()
-        Me.Bounds = New RectangleF(Me.Pivot, New Size(60, 60))
-    End Sub
-
-    Protected Overrides Sub Render(canvas As GUI.Canvas.GH_Canvas, graphics As Graphics, channel As GUI.Canvas.GH_CanvasChannel)
-        RenderImage(Owner.IsOpen, canvas, graphics)
-    End Sub
-
-    Protected Sub RenderImage(Open As Boolean, Canvas As GH_Canvas, graphics As System.Drawing.Graphics)
-        Dim img As Bitmap = Nothing
-        If (Open) Then
-            If (Me.Selected) Then
-                img = My.Resources.iconOpenSel
-            Else
-                img = My.Resources.iconOpenNoSel
-            End If
-        Else
-            If (Me.Selected) Then
-                img = My.Resources.iconClosedSel
-            Else
-                img = My.Resources.iconClosedNoSel
-            End If
-        End If
-
-        Dim pt As New System.Drawing.Point(Pivot.X, Pivot.Y)
-        graphics.DrawImage(img, pt)
-    End Sub
-#End Region
-
-End Class
-
-<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
-Partial Class Form1
-    Inherits System.Windows.Forms.Form
-
-    <System.Diagnostics.DebuggerNonUserCode()>
-    Protected Overrides Sub Dispose(ByVal disposing As Boolean)
-        Try
-            If disposing AndAlso components IsNot Nothing Then
-                components.Dispose()
-            End If
-        Finally
-            MyBase.Dispose(disposing)
-        End Try
-    End Sub
-
-    Public components As System.ComponentModel.IContainer
-
-    <System.Diagnostics.DebuggerStepThrough()>
-    Private Sub InitializeComponent()
-        Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
-        Me.SplitContainer1 = New System.Windows.Forms.SplitContainer()
-        Me.ButtOpenTabs = New System.Windows.Forms.Button()
-        Me.SplitContainer3 = New System.Windows.Forms.SplitContainer()
-        Me.TabControl1 = New System.Windows.Forms.TabControl()
-        Me.SplitContainer4 = New System.Windows.Forms.SplitContainer()
-        Me.SplitContainer6 = New System.Windows.Forms.SplitContainer()
-        Me.ButtFile = New System.Windows.Forms.Button()
-        Me.SplitContainer7 = New System.Windows.Forms.SplitContainer()
-        Me.ButtDel = New System.Windows.Forms.Button()
-        Me.ButtAdd = New System.Windows.Forms.Button()
-        Me.SplitContainer5 = New System.Windows.Forms.SplitContainer()
-        Me.ButtCancel = New System.Windows.Forms.Button()
-        Me.ButtAccept = New System.Windows.Forms.Button()
-        Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
-        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer1.Panel1.SuspendLayout()
-        Me.SplitContainer1.Panel2.SuspendLayout()
-        Me.SplitContainer1.SuspendLayout()
-        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer3.Panel1.SuspendLayout()
-        Me.SplitContainer3.Panel2.SuspendLayout()
-        Me.SplitContainer3.SuspendLayout()
-        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer4.Panel1.SuspendLayout()
-        Me.SplitContainer4.Panel2.SuspendLayout()
-        Me.SplitContainer4.SuspendLayout()
-        CType(Me.SplitContainer6, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer6.Panel1.SuspendLayout()
-        Me.SplitContainer6.Panel2.SuspendLayout()
-        Me.SplitContainer6.SuspendLayout()
-        CType(Me.SplitContainer7, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer7.Panel1.SuspendLayout()
-        Me.SplitContainer7.Panel2.SuspendLayout()
-        Me.SplitContainer7.SuspendLayout()
-        CType(Me.SplitContainer5, System.ComponentModel.ISupportInitialize).BeginInit()
-        Me.SplitContainer5.Panel1.SuspendLayout()
-        Me.SplitContainer5.Panel2.SuspendLayout()
-        Me.SplitContainer5.SuspendLayout()
-        Me.SuspendLayout()
-        '
-        'SplitContainer1
-        '
-        Me.SplitContainer1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1
-        Me.SplitContainer1.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer1.Margin = New System.Windows.Forms.Padding(0)
-        Me.SplitContainer1.Name = "SplitContainer1"
-        Me.SplitContainer1.IsSplitterFixed = True
-        '
-        'SplitContainer1.Panel1
-        '
-        Me.SplitContainer1.Panel1MinSize = 12
-        ' Me.SplitContainer1.Panel1.MinimumSize = New Size(12, 333)
-        Me.SplitContainer1.Panel1.Controls.Add(Me.ButtOpenTabs)
-        '
-        'SplitContainer1.Panel2
-        '
-        Me.SplitContainer1.Panel2.Controls.Add(Me.SplitContainer3)
-        Me.SplitContainer1.Panel2MinSize = 68
-        Me.SplitContainer1.Size = New System.Drawing.Size(352, 333)
-        Me.SplitContainer1.SplitterDistance = 12
-        Me.SplitContainer1.SplitterWidth = 1
-        Me.SplitContainer1.TabIndex = 0
-        '
-        'ButtOpenTabs
-        '
-        Me.ButtOpenTabs.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtOpenTabs.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.ButtOpenTabs.Location = New System.Drawing.Point(0, 0)
-        Me.ButtOpenTabs.Margin = New System.Windows.Forms.Padding(0)
-        Me.ButtOpenTabs.Name = "ButtOpenTabs"
-        Me.ButtOpenTabs.Size = New System.Drawing.Size(12, 333)
-        Me.ButtOpenTabs.TabIndex = 6
-        Me.ButtOpenTabs.TabStop = False
-        Me.ButtOpenTabs.Tag = "False"
-        Me.ButtOpenTabs.Text = "<"
-        Me.ToolTip1.SetToolTip(Me.ButtOpenTabs, "Show the tabs manager")
-        Me.ButtOpenTabs.UseVisualStyleBackColor = False
-        '
-        'SplitContainer3
-        '
-        Me.SplitContainer3.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer3.FixedPanel = System.Windows.Forms.FixedPanel.Panel2
-        Me.SplitContainer3.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer3.Name = "SplitContainer3"
-        Me.SplitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal
-        '
-        'SplitContainer3.Panel1
-        '
-        Me.SplitContainer3.Panel1.Controls.Add(Me.TabControl1)
-        '
-        'SplitContainer3.Panel2
-        '
-        Me.SplitContainer3.Panel2.Controls.Add(Me.SplitContainer4)
-        Me.SplitContainer3.Panel2.Padding = New System.Windows.Forms.Padding(4, 0, 4, 6)
-        Me.SplitContainer3.Size = New System.Drawing.Size(300, 333)
-        Me.SplitContainer3.SplitterDistance = 300
-        Me.SplitContainer3.SplitterWidth = 1
-        Me.SplitContainer3.TabIndex = 0
-        Me.SplitContainer3.IsSplitterFixed = True
-        '
-        'TabControl1
-        '
-        Me.TabControl1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.TabControl1.Location = New System.Drawing.Point(0, 0)
-        Me.TabControl1.Name = "TabControl1"
-        Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(300, 300)
-        Me.TabControl1.TabIndex = 0
-        '
-        'SplitContainer4
-        '
-        Me.SplitContainer4.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer4.Location = New System.Drawing.Point(4, 0)
-        Me.SplitContainer4.Name = "SplitContainer4"
-        Me.SplitContainer4.IsSplitterFixed = True
-        '
-        'SplitContainer4.Panel1
-        '
-        Me.SplitContainer4.Panel1.Controls.Add(Me.SplitContainer6)
-        '
-        'SplitContainer4.Panel2
-        '
-        Me.SplitContainer4.Panel2.Controls.Add(Me.SplitContainer5)
-        Me.SplitContainer4.Size = New System.Drawing.Size(292, 26)
-        Me.SplitContainer4.SplitterDistance = 146
-        Me.SplitContainer4.TabIndex = 0
-        '
-        'SplitContainer6
-        '
-        Me.SplitContainer6.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer6.IsSplitterFixed = True
-        Me.SplitContainer6.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer6.Name = "SplitContainer6"
-        Me.SplitContainer6.IsSplitterFixed = True
-        '
-        'SplitContainer6.Panel1
-        '
-        Me.SplitContainer6.Panel1.Controls.Add(Me.ButtFile)
-        Me.SplitContainer6.Panel1MinSize = 10
-        '
-        'SplitContainer6.Panel2
-        '
-        Me.SplitContainer6.Panel2.Controls.Add(Me.SplitContainer7)
-        Me.SplitContainer6.Size = New System.Drawing.Size(146, 26)
-        Me.SplitContainer6.SplitterDistance = 35
-        Me.SplitContainer6.TabIndex = 0
-        '
-        'ButtFile
-        '
-        Me.ButtFile.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtFile.Location = New System.Drawing.Point(0, 0)
-        Me.ButtFile.Name = "ButtFile"
-        Me.ButtFile.Size = New System.Drawing.Size(30, 26)
-        Me.ButtFile.TabIndex = 4
-        Me.ButtFile.Text = "File"
-        Me.ToolTip1.SetToolTip(Me.ButtFile, "Select the file")
-        Me.ButtFile.UseVisualStyleBackColor = True
-        '
-        'SplitContainer7
-        '
-        Me.SplitContainer7.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer7.IsSplitterFixed = True
-        Me.SplitContainer7.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer7.Name = "SplitContainer7"
-        Me.SplitContainer7.IsSplitterFixed = True
-        '
-        'SplitContainer7.Panel1
-        '
-        Me.SplitContainer7.Panel1.Controls.Add(Me.ButtDel)
-        '
-        'SplitContainer7.Panel2
-        '
-        Me.SplitContainer7.Panel2.Controls.Add(Me.ButtAdd)
-        Me.SplitContainer7.Size = New System.Drawing.Size(112, 26)
-        Me.SplitContainer7.SplitterDistance = 55
-        Me.SplitContainer7.TabIndex = 0
-        '
-        'ButtDel
-        '
-        Me.ButtDel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtDel.Location = New System.Drawing.Point(0, 0)
-        Me.ButtDel.Name = "ButtDel"
-        Me.ButtDel.Size = New System.Drawing.Size(55, 26)
-        Me.ButtDel.TabIndex = 3
-        Me.ButtDel.Text = "Del"
-        Me.ToolTip1.SetToolTip(Me.ButtDel, "Delete a brick of the box")
-        Me.ButtDel.UseVisualStyleBackColor = True
-        '
-        'ButtAdd
-        '
-        Me.ButtAdd.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtAdd.Location = New System.Drawing.Point(0, 0)
-        Me.ButtAdd.Name = "ButtAdd"
-        Me.ButtAdd.Size = New System.Drawing.Size(53, 26)
-        Me.ButtAdd.TabIndex = 2
-        Me.ButtAdd.Text = "Add"
-        Me.ToolTip1.SetToolTip(Me.ButtAdd, "Add a new brick of components")
-        Me.ButtAdd.UseVisualStyleBackColor = True
-        '
-        'SplitContainer5
-        '
-        Me.SplitContainer5.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.SplitContainer5.Location = New System.Drawing.Point(0, 0)
-        Me.SplitContainer5.Name = "SplitContainer5"
-        Me.SplitContainer5.IsSplitterFixed = True
-        '
-        'SplitContainer5.Panel1
-        '
-        Me.SplitContainer5.Panel1.Controls.Add(Me.ButtCancel)
-        '
-        'SplitContainer5.Panel2
-        '
-        Me.SplitContainer5.Panel2.Controls.Add(Me.ButtAccept)
-        Me.SplitContainer5.Size = New System.Drawing.Size(142, 26)
-        Me.SplitContainer5.SplitterDistance = 68
-        Me.SplitContainer5.TabIndex = 0
-        '
-        'ButtCancel
-        '
-        Me.ButtCancel.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtCancel.Location = New System.Drawing.Point(0, 0)
-        Me.ButtCancel.Name = "ButtCancel"
-        Me.ButtCancel.Size = New System.Drawing.Size(68, 26)
-        Me.ButtCancel.TabIndex = 1
-        Me.ButtCancel.Text = "Cancel"
-        Me.ToolTip1.SetToolTip(Me.ButtCancel, "Close the box")
-        Me.ButtCancel.UseVisualStyleBackColor = True
-        '
-        'ButtAccept
-        '
-        Me.ButtAccept.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.ButtAccept.Location = New System.Drawing.Point(0, 0)
-        Me.ButtAccept.Name = "ButtAccept"
-        Me.ButtAccept.Size = New System.Drawing.Size(70, 26)
-        Me.ButtAccept.TabIndex = 0
-        Me.ButtAccept.Text = "Accept"
-        Me.ToolTip1.SetToolTip(Me.ButtAccept, "Take a brick of components to the canvas")
-        Me.ButtAccept.UseVisualStyleBackColor = True
-        '
-        'OpenFileDialog1
-        '
-        Me.OpenFileDialog1.FileName = ""
-        Me.OpenFileDialog1.Filter = "gh file|*.gh|ghx file|*.ghx"
-        '
-        'Form1
-        '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
-        Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(310, 333)
-        Me.MinimumSize = New System.Drawing.Size(200, 214)
-        Me.Controls.Add(Me.SplitContainer1)
-        Me.DoubleBuffered = True
-        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable
-        Me.Icon = My.Resources.Icon24x24
-        Me.ShowIcon = False
-        Me.Name = "Form1"
-        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "    Brick Box "
-        Me.TopMost = True
-        Me.HelpButton = True
-        Me.MaximizeBox = False
-        Me.MinimizeBox = False
-        Me.SplitContainer1.Panel1.ResumeLayout(False)
-        Me.SplitContainer1.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer1, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer1.ResumeLayout(False)
-        Me.SplitContainer3.Panel1.ResumeLayout(False)
-        Me.SplitContainer3.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer3, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer3.ResumeLayout(False)
-        Me.SplitContainer4.Panel1.ResumeLayout(False)
-        Me.SplitContainer4.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer4, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer4.ResumeLayout(False)
-        Me.SplitContainer6.Panel1.ResumeLayout(False)
-        Me.SplitContainer6.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer6, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer6.ResumeLayout(False)
-        Me.SplitContainer7.Panel1.ResumeLayout(False)
-        Me.SplitContainer7.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer7, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer7.ResumeLayout(False)
-        Me.SplitContainer5.Panel1.ResumeLayout(False)
-        Me.SplitContainer5.Panel2.ResumeLayout(False)
-        CType(Me.SplitContainer5, System.ComponentModel.ISupportInitialize).EndInit()
-        Me.SplitContainer5.ResumeLayout(False)
-        Me.ResumeLayout(False)
-
-    End Sub
-
-    Friend WithEvents SplitContainer1 As SplitContainer
-    Friend WithEvents ButtOpenTabs As Button
-    Friend WithEvents SplitContainer3 As SplitContainer
-    Friend WithEvents SplitContainer4 As SplitContainer
-    Friend WithEvents SplitContainer6 As SplitContainer
-    Friend WithEvents ButtFile As Button
-    Friend WithEvents SplitContainer7 As SplitContainer
-    Friend WithEvents ButtDel As Button
-    Friend WithEvents ButtAdd As Button
-    Friend WithEvents SplitContainer5 As SplitContainer
-    Friend WithEvents ButtCancel As Button
-    Friend WithEvents ButtAccept As Button
-    Friend WithEvents ToolTip1 As ToolTip
-    Friend WithEvents TabControl1 As TabControl
-    Friend WithEvents OpenFileDialog1 As OpenFileDialog
 End Class
 
 Class ContactPopUp
@@ -1758,7 +2181,7 @@ Class ContactPopUp
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent
         Me.Text = "Contact"
-        Me.TopMost = True
+        Me.Owner = Grasshopper.Instances.DocumentEditor
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1779,3 +2202,116 @@ Class ContactPopUp
     End Sub
 
 End Class
+#End Region
+
+#Region "GH Component"
+Public Class BrickBoxComp
+    Inherits GH_Component
+
+    Public IsOpen As Boolean
+
+    Sub New()
+        MyBase.New("Brick Box", "Brick Box", "Stores and retrieves bricks of grasshopper definitions", "Params", "Util")
+
+    End Sub
+
+    Protected Overrides ReadOnly Property Icon() As System.Drawing.Bitmap
+        Get
+            Return My.Resources.icon0
+        End Get
+    End Property
+
+    Public Overrides ReadOnly Property ComponentGuid As Guid
+        Get
+            Return New Guid("{ec80e1fd-61e8-4762-8d04-95ee729ce409}")
+        End Get
+    End Property
+
+    Public Overrides Sub CreateAttributes()
+        m_attributes = New BrickBoxCompAtt(Me)
+    End Sub
+
+    Protected Overrides Sub RegisterInputParams(pManager As GH_InputParamManager)
+    End Sub
+
+    Protected Overrides Sub RegisterOutputParams(pManager As GH_OutputParamManager)
+    End Sub
+
+    Protected Overrides Sub SolveInstance(DA As IGH_DataAccess)
+    End Sub
+
+    Protected Overrides Sub AppendAdditionalComponentMenuItems(menu As ToolStripDropDown)
+        MyBase.AppendAdditionalComponentMenuItems(menu)
+        GH_DocumentObject.Menu_AppendItem(menu, "Contact", AddressOf Contact)
+    End Sub
+
+    Private PopUp As ContactPopUp
+
+    Private Sub Contact(ByVal sender As Object, ByVal e As EventArgs)
+        If (PopUp IsNot Nothing) Then PopUp.Dispose()
+        PopUp = New ContactPopUp()
+    End Sub
+
+End Class
+
+Public Class BrickBoxCompAtt
+    Inherits GH_Attributes(Of BrickBoxComp)
+
+    Public _Form1 As Form1
+
+    Sub New(owner As BrickBoxComp)
+        MyBase.New(owner)
+        owner.IsOpen = False
+    End Sub
+
+    Public Overrides Function RespondToMouseDoubleClick(sender As GH_Canvas, e As GH_CanvasMouseEvent) As GH_ObjectResponse
+        If e.Button = MouseButtons.Left AndAlso Me.Bounds.Contains(e.CanvasLocation) Then
+            If Not (Owner.IsOpen) Then
+                _Form1 = New Form1(MyBase.Owner)
+                Owner.IsOpen = True
+            Else
+                If (_Form1 IsNot Nothing) Then
+                    _Form1.Close()
+                    _Form1.Dispose()
+                End If
+                Owner.IsOpen = False
+            End If
+            MyBase.Owner.ExpireSolution(True)
+        End If
+        Return MyBase.RespondToMouseDoubleClick(sender, e)
+    End Function
+
+#Region "Render"
+
+    Protected Overrides Sub Layout()
+        Me.Bounds = New RectangleF(Me.Pivot, New Size(60, 60))
+    End Sub
+
+    Protected Overrides Sub Render(canvas As GUI.Canvas.GH_Canvas, graphics As Graphics, channel As GUI.Canvas.GH_CanvasChannel)
+        RenderImage(Owner.IsOpen, canvas, graphics)
+    End Sub
+
+    Protected Sub RenderImage(Open As Boolean, Canvas As GH_Canvas, graphics As System.Drawing.Graphics)
+        Dim img As Bitmap = Nothing
+        If (Open) Then
+            If (Me.Selected) Then
+                img = My.Resources.iconOpenSel
+            Else
+                img = My.Resources.iconOpenNoSel
+            End If
+        Else
+            If (Me.Selected) Then
+                img = My.Resources.iconClosedSel
+            Else
+                img = My.Resources.iconClosedNoSel
+            End If
+        End If
+
+        Dim pt As New System.Drawing.Point(Pivot.X, Pivot.Y)
+        graphics.DrawImage(img, pt)
+    End Sub
+#End Region
+
+End Class
+#End Region
+

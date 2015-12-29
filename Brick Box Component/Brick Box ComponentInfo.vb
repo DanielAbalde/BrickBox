@@ -22,7 +22,7 @@ Public Class BrickBoxComponentInfo
     End Property
     Public Overrides ReadOnly Property Id As System.Guid
         Get
-            Return New System.Guid("69f1c7f2-a53f-4040-b8ef-e99446235e57")
+            Return New System.Guid("ec80e1fd-61e8-4762-8d04-95ee729ce409")
         End Get
     End Property
 

@@ -65,6 +65,18 @@ Namespace My
                 Me("FilePath") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("60")>  _
+        Public Property BrickSize() As Integer
+            Get
+                Return CType(Me("BrickSize"),Integer)
+            End Get
+            Set
+                Me("BrickSize") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
