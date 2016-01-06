@@ -1,4 +1,5 @@
-﻿Imports Grasshopper
+﻿Imports Rhino
+Imports Grasshopper
 Imports Grasshopper.Kernel
 Imports GH_IO
 Imports GH_IO.Serialization
@@ -174,6 +175,7 @@ Public Class Form1
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(300, 300)
         Me.TabControl1.TabIndex = 0
+        Me.TabControl1.AllowDrop = True
         '
         'SplitContainer4
         '
@@ -492,8 +494,8 @@ Public Class Form1
 "To add a new brick in the box, press the |Add button| and a pop-up window will appear. Select the components on the canvas which want to add," & vbCrLf &
 "the image of the brick may be the screenshot of the canvas or rhino viewport. Add a name for the new brick in the text box and press done." & vbCrLf &
 "" & vbCrLf &
-"You can drag a brick from one box to another to add it to the target box pressing CTRL key while dragging. You can also drag to the box a gh file which contains BrickBox data for attaching all its contents to the target box." & vbCrLf &
-"Moving the mouse wheel and pressing the SHIFT key you can change the size of the bricks." & vbCrLf &
+"You can drag a brick or a tab from one box to another to add it to the target box pressing CTRL key while dragging. You can also drag to the box a gh file which contains BrickBox data for attaching all its contents to the target box." & vbCrLf &
+        "Moving the mouse wheel And pressing the SHIFT key you can change the size Of the bricks." & vbCrLf &
         "" & vbCrLf &
 "Right-clicking on the component, you can access to contact and development information.", "Help")
         e.Cancel = True
@@ -541,7 +543,7 @@ Public Class Form1
         Me.ListModesBox.BorderStyle = System.Windows.Forms.BorderStyle.None
         Me.ListModesBox.Dock = System.Windows.Forms.DockStyle.Left
         Me.ListModesBox.FormattingEnabled = True
-        Me.ListModesBox.Items.AddRange(New Object() {"Add new tab", "Rename tab", "Delete tab"})
+        Me.ListModesBox.Items.AddRange(New Object() {"Add New tab", "Rename tab", "Delete tab"})
         Me.ListModesBox.Location = New System.Drawing.Point(4, 16)
         Me.ListModesBox.Name = "ListModesBox"
         Me.ListModesBox.Size = New System.Drawing.Size(140, 43)
@@ -638,7 +640,7 @@ Public Class Form1
         If (Me.ListModesBox.GetSelected(0)) Then
             Mode = 1
             If (Me.GroupControls.Controls.Count > 0) Then Me.GroupControls.Controls.Clear()
-            Me.GroupControls.Text = "Add new tab"
+            Me.GroupControls.Text = "Add New tab"
             Me.SetModeAddTabControls()
 
         ElseIf (Me.ListModesBox.GetSelected(1)) Then
@@ -735,7 +737,7 @@ Public Class Form1
             Case 1 'Add.
                 Dim name As String = NameBox.Text
                 If (name Is Nothing) Or (name = "Name") Then
-                    MessageBox.Show("Type a name to add a new tab.")
+                    MessageBox.Show("Type a name To add a New tab.")
                     Return
                 End If
                 Me.Caja.CreateNewTab(name)
@@ -743,7 +745,7 @@ Public Class Form1
             Case 2 'Rename.
                 Dim index As Integer = TabsBox.SelectedIndex()
                 If (index = -1) Then
-                    MessageBox.Show("There is no tab with this name.")
+                    MessageBox.Show("There Is no tab With this name.")
                     Return
                 Else
                     'If (index < Me.TabControl1.TabPages.Count) Then
@@ -755,13 +757,13 @@ Public Class Form1
             Case 3 'Delete.
                 Dim index As Integer = TabsBox.SelectedIndex()
                 If (index = -1) Then
-                    MessageBox.Show("There is no tab with this name.")
+                    MessageBox.Show("There Is no tab With this name.")
                     Return
                 Else
                     'If (index < Me.TabControl1.TabPages.Count) Then
                     '    Dim page As TabPage = Me.TabControl1.TabPages.Item(index)
                     '    If (page IsNot Nothing) Then
-                    '        Dim result As DialogResult = MessageBox.Show("Are you sure you want to delete the tab """ & page.Text & """ and all its content?", "", MessageBoxButtons.YesNo)
+                    '        Dim result As DialogResult = MessageBox.Show("Are you sure you want To delete the tab """ & page.Text & """ And all its content?", "", MessageBoxButtons.YesNo)
                     '        If (result = DialogResult.Yes) Then
                     '            Me.TabControl1.TabPages.Remove(page)
                     '            Me.SetModeDeleteTabControls()
@@ -831,6 +833,72 @@ Public Class Form1
 
 #End Region
 
+#Region "DragTabs"
+    Private Function getHoverTabIndex() As Integer
+        For i As Integer = 0 To TabControl1.TabPages.Count - 1
+            If TabControl1.GetTabRect(i).Contains(TabControl1.PointToClient(Cursor.Position)) Then
+                Return i
+                Exit Function
+            End If
+        Next
+        Return -1
+    End Function
+
+    Private Sub Tabs_MouseDown(Sender As Object, e As MouseEventArgs) Handles TabControl1.MouseDown
+        If (e.Button = MouseButtons.Left) Then
+            Dim keyboard As New Microsoft.VisualBasic.Devices.Keyboard
+            If (keyboard.CtrlKeyDown) Then
+                Dim index As Integer = getHoverTabIndex()
+                If (index = -1) Then Exit Sub
+                Dim tabToMove As TabPage = TabControl1.TabPages(index)
+                TabControl1.DoDragDrop(tabToMove, DragDropEffects.Copy)
+            End If
+        End If
+    End Sub
+
+    Private Sub Tabs_DragEnter(sender As Object, e As DragEventArgs) Handles TabControl1.DragEnter
+        e.Effect = DragDropEffects.All
+    End Sub
+
+    Private Sub Tabs_DragDrop(sender As Object, e As DragEventArgs) Handles TabControl1.DragDrop
+
+        Dim replaceindex As Integer = getHoverTabIndex()
+        If (replaceindex = -1) Then Exit Sub
+        Dim tabToMove As TabPage = DirectCast(e.Data.GetData(GetType(TabPage)), TabPage)
+        If (tabToMove Is Nothing) Then Exit Sub
+        Dim tabToReplace As TabPage = TabControl1.TabPages(replaceindex)
+        If (tabToMove.Parent.Equals(tabToReplace.Parent)) Then
+            TabControl1.TabPages(tabToMove.TabIndex) = tabToReplace
+            TabControl1.TabPages(replaceindex) = tabToMove
+            tabToReplace.TabIndex = tabToMove.TabIndex
+            tabToMove.TabIndex = replaceindex
+        Else
+            If (Caja.NombresPestañas.Contains(tabToMove.Text)) Then
+                tabToMove.Text = tabToMove.Text & "*"
+                tabToMove.Name = tabToMove.Name & "*"
+                For Each b As Brick In tabToMove.Controls(0).Controls
+                    b.Pestaña = tabToMove.Name
+                Next
+            End If
+            For Each b As Brick In tabToMove.Controls(0).Controls
+                If (Caja.NombresBloques.Contains(b.Nombre)) Then
+                    b.Nombre = b.Nombre & "*"
+                End If
+                Caja.NombresBloques.Add(b.Nombre)
+                b._form1 = Me
+            Next
+            Caja.NombresPestañas.Add(tabToMove.Name)
+            tabToMove.TabIndex = TabControl1.TabCount
+            TabControl1.TabPages.Add(tabToMove)
+        End If
+        TabControl1.SelectedTab = tabToMove
+        TabControl1.Refresh()
+        If (Convert.ToBoolean(ButtOpenTabs.Tag)) Then TabsToTree()
+        Caja.HaCambiado = True
+        Caja.Seleccionado = Nothing
+    End Sub
+#End Region
+
 End Class
 
 Public Class Brick
@@ -839,7 +907,7 @@ Public Class Brick
     Public _form1 As Form1
     Public Nombre As String
     Public Pestaña As String
-    Public Indice As Integer
+    Public Indice As IndexPair 'I = Index of tab, J = Index of brick.
     Public IMG As Bitmap
     Public Data As Byte()
 
@@ -850,18 +918,17 @@ Public Class Brick
         _form1 = Parent
         Nombre = SuNombre
         Pestaña = SuPestaña
-        Me.Tag = _form1.Caja.NombresPestañas.IndexOf(SuPestaña)
-        Indice = _form1.Caja.NombresPestañas.Count
+        Dim tab As TabPage = _form1.Caja.FindTab(SuPestaña)
+        Indice = New IndexPair(tab.TabIndex, tab.Controls(0).Controls.Count)
         Data = CaptureData()
         If (Data Is Nothing) Then
-            MessageBox.Show("Binary data could not be read.")
+            ' MessageBox.Show("Binary data could not be read.")
             Return
         End If
         IMG = CaptureImage(Capture)
         If (IMG Is Nothing) Then
             MessageBox.Show("Image could not be captured.")
         End If
-        Me.Tag = Parent.Caja.NombresPestañas.IndexOf(SuPestaña)
         Me.PerformControl()
 
     End Sub
@@ -871,23 +938,32 @@ Public Class Brick
         _form1 = Parent
         Try
             Me.Pestaña = reader.GetString(NameOfTab, 0)
-        Me.Tag = reader.GetInt32(IndexOfTab, 1)
-        Me.Nombre = reader.GetString(NameOfBrick, 2)
-        Me.Indice = reader.GetInt32(IndexOfBrick, 3)
-        Me.Data = reader.GetByteArray(BinaryName, 4)
+            Me.Indice.I = reader.GetInt32(IndexOfTab, 1)
+            Me.Nombre = reader.GetString(NameOfBrick, 2)
+            Me.Indice.J = reader.GetInt32(IndexOfBrick, 3)
+            Me.Data = reader.GetByteArray(BinaryName, 4)
             Me.IMG = reader.GetDrawingBitmap(IMGName, 5)
-        Catch ex As Exception
-            MessageBox.Show("Could not read data from this file")
+        Catch ex0 As Exception
+            Try
+                Me.Pestaña = reader.GetString("Name Of tab", 0)
+                Me.Indice.I = reader.GetInt32("Index Of tab", 1)
+                Me.Nombre = reader.GetString("Name Of brick", 2)
+                Me.Indice.J = reader.GetInt32("Index Of brick", 3)
+                Me.Data = reader.GetByteArray(BinaryName, 4)
+                Me.IMG = reader.GetDrawingBitmap(IMGName, 5)
+            Catch ex As Exception
+                MessageBox.Show("Could not read data from this file")
+                Rhino.RhinoApp.WriteLine("Exception: " & ex.ToString())
+            End Try
         End Try
         Me.PerformControl()
     End Sub
 
-    Public Sub New(Parent As Form1, SuNombre As String, SuPestaña As String, SuIndice As Integer, SuIMG As Bitmap, SusDatos As Byte())
+    Public Sub New(Parent As Form1, SuNombre As String, SuPestaña As String, SuIndice As IndexPair, SuIMG As Bitmap, SusDatos As Byte())
         MyBase.New()
         _form1 = Parent
         Nombre = SuNombre
         Pestaña = SuPestaña
-        Me.Tag = _form1.Caja.NombresPestañas.IndexOf(SuPestaña)
         Indice = SuIndice
         IMG = SuIMG
         Data = SusDatos
@@ -896,7 +972,7 @@ Public Class Brick
 
     Private Sub PerformControl()
         Me.Size = New Size(My.Settings.BrickSize, My.Settings.BrickSize)
-        Me.Name = "PictureBox_" & Nombre
+        Me.Name = Nombre
         Me.Margin = New Padding(3)
         Me.SizeMode = PictureBoxSizeMode.Zoom
         Me.Image = IMG
@@ -1012,7 +1088,6 @@ Public Class Brick
             If (keyboard.CtrlKeyDown) Then
                 Me.DoDragDrop(Sender, DragDropEffects.Copy)
             End If
-
         End If
     End Sub
 
@@ -1029,9 +1104,9 @@ Public Class Brick
 
     Public Function Write(writer As GH_IWriter) As Boolean
         writer.SetString(NameOfTab, 0, Me.Pestaña)
-        writer.SetInt32(IndexOfTab, 1, CInt(Me.Tag))
+        writer.SetInt32(IndexOfTab, 1, Me.Indice.I)
         writer.SetString(NameOfBrick, 2, Me.Nombre)
-        writer.SetInt32(IndexOfBrick, 3, Me.Indice)
+        writer.SetInt32(IndexOfBrick, 3, Me.Indice.J)
         writer.SetByteArray(BinaryName, 4, Me.Data)
         writer.SetDrawingBitmap(IMGName, 5, Me.IMG)
         Return True
@@ -1073,14 +1148,17 @@ Public Class BrickBox
     Public Sub AddBrick(Bloque As Brick)
 
         If (NombresBloques.Contains(Bloque.Nombre)) Then
-            MessageBox.Show("Already exists a brick with name """ & Bloque.Nombre & """.", "")
-            Exit Sub
+            'MessageBox.Show("Already exists a brick With name """ & Bloque.Nombre & """.", "")
+            ' Exit Sub
+            Bloque.Nombre = Bloque.Nombre & "*"
+
         End If
         Dim tab As TabPage = FindTab(Bloque.Pestaña)
         If (tab Is Nothing) Then
-            MessageBox.Show("The brick """ & Bloque.Nombre & """ has a tab that does Not exist In this box.")
+            MessageBox.Show("The brick """ & Bloque.Nombre & """ has a tab that does not exist in this box.")
             Exit Sub
         End If
+        Bloque.Indice.J = tab.Controls(0).Controls.Count
         tab.Controls(0).Controls.Add(Bloque)
         NombresBloques.Add(Bloque.Nombre)
         If (Convert.ToBoolean(_Form1.ButtOpenTabs.Tag)) Then _Form1.TabsToTree()
@@ -1092,10 +1170,11 @@ Public Class BrickBox
 
         Dim tab As TabPage = FindTab(Pestaña)
         If (tab Is Nothing) Then
-            MessageBox.Show("The tab """ & Pestaña & """ does Not exist In this box.")
+            MessageBox.Show("The tab """ & Pestaña & """ does not exist in this box.")
             Exit Sub
         End If
-        Dim bloqueCopia As New Brick(_Form1, Bloque.Nombre, Pestaña, Bloque.Indice, Bloque.IMG, Bloque.Data)
+        Dim indexpair As New IndexPair(tab.TabIndex, tab.Controls(0).Controls.Count)
+        Dim bloqueCopia As New Brick(_Form1, Bloque.Nombre, Pestaña, indexpair, Bloque.IMG, Bloque.Data)
         FindBrick(Bloque.Nombre, Bloque.Pestaña).Dispose()
         _Form1.TabControl1.SelectedTab = tab
         tab.Controls(0).Controls.Add(bloqueCopia)
@@ -1108,7 +1187,7 @@ Public Class BrickBox
     Public Sub DeleteBrick()
         If (Seleccionado Is Nothing) Then Return
         If Not (NombresBloques.Contains(Seleccionado.Nombre)) Then
-            MessageBox.Show("There Is no brick With this name")
+            MessageBox.Show("There is no brick with this name")
             Return
         End If
         If (Display IsNot Nothing) Then Display.Dispose()
@@ -1183,13 +1262,37 @@ Public Class BrickBox
         End If
 
         If (dragged._form1.Equals(Me._Form1)) Then
+            Dim tab As TabPage = _Form1.TabControl1.SelectedTab
+
+            For Each b As Brick In tab.Controls(0).Controls
+                If (b.Bounds.Contains(tab.Controls(0).PointToClient(Cursor.Position))) AndAlso Not (dragged.Nombre.Equals(b.Nombre)) Then
+                    Dim ind0 As Integer = dragged.Indice.J
+                    Dim ind1 As Integer = b.Indice.J
+                    If (ind0 < ind1) Then
+                        tab.Controls(0).Controls.SetChildIndex(b, ind0)
+                        tab.Controls(0).Controls.SetChildIndex(dragged, ind1)
+                        b.Indice.J = ind0
+                        dragged.Indice.J = ind1
+                    Else
+                        tab.Controls(0).Controls.SetChildIndex(dragged, ind1)
+                        tab.Controls(0).Controls.SetChildIndex(b, ind0)
+                        dragged.Indice.J = ind1
+                        b.Indice.J = ind0
+                    End If
+                    tab.Refresh()
+                    HaCambiado = True
+                    Exit For
+                End If
+            Next
+
             Exit Sub
         End If
         If (NombresBloques.Contains(dragged.Nombre)) Then
-            MessageBox.Show("This box allready contains a brick With this name.")
+            MessageBox.Show("This box allready contains a brick with this name.")
             Exit Sub
         End If
-        Dim newbrick As New Brick(_Form1, dragged.Nombre, _Form1.TabControl1.SelectedTab.Name, NombresBloques.Count, dragged.IMG, dragged.Data)
+        Dim indexpair As New IndexPair(_Form1.TabControl1.SelectedTab.TabIndex, _Form1.TabControl1.SelectedTab.Controls(0).Controls.Count)
+        Dim newbrick As New Brick(_Form1, dragged.Nombre, _Form1.TabControl1.SelectedTab.Name, indexpair, dragged.IMG, dragged.Data)
         Me.AddBrick(newbrick)
 
     End Sub
@@ -1222,21 +1325,18 @@ Public Class BrickBox
     Public Sub CreateNewTab(SuNombre As String)
 
         If (NombresPestañas.Contains(SuNombre)) Then
-            MessageBox.Show("Already exists a tab With this name, try another")
+            MessageBox.Show("Already exists a tab with this name, try another")
             Return
         End If
 
         Dim Pestaña As New System.Windows.Forms.TabPage()
 
         Pestaña.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Pestaña.Location = New System.Drawing.Point(4, 22)
         Pestaña.Name = SuNombre
-        Pestaña.Padding = New System.Windows.Forms.Padding(3)
-        Pestaña.Size = New System.Drawing.Size(292, 281)
-        Pestaña.TabIndex = 0
         Pestaña.Text = SuNombre
+        Pestaña.Padding = New System.Windows.Forms.Padding(3)
+        Pestaña.TabIndex = _Form1.TabControl1.TabCount
         Pestaña.UseVisualStyleBackColor = True
-        Pestaña.Tag = _Form1.TabControl1.TabCount
 
         Dim panel As New System.Windows.Forms.FlowLayoutPanel()
 
@@ -1268,13 +1368,12 @@ Public Class BrickBox
             Return
         End If
 
-        Dim result As DialogResult = MessageBox.Show("Are you sure you want to delete the """ & SuNombre & """ tab And all its content?", "", MessageBoxButtons.YesNo)
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to delete the """ & SuNombre & """ tab and all its content?", "", MessageBoxButtons.YesNo)
         If (result = DialogResult.Yes) Then
             For Each tab As TabPage In _Form1.TabControl1.TabPages
                 If (tab.Name.Equals(SuNombre)) Then
-                    Dim index As Integer = tab.Tag
-                    _Form1.TabControl1.TabPages.RemoveAt(index)
-                    Me.NombresPestañas.RemoveAt(index)
+                    _Form1.TabControl1.TabPages.RemoveAt(tab.TabIndex)
+                    Me.NombresPestañas.RemoveAt(Me.NombresPestañas.IndexOf(tab.Name))
                     tab.Dispose()
                     HaCambiado = True
                     Exit For
@@ -1287,7 +1386,7 @@ Public Class BrickBox
     Public Sub RenameTab(SuNombre As String, NuevoNombre As String)
 
         If Not (NombresPestañas.Contains(SuNombre)) Then
-            MessageBox.Show("There Is no tab with this name.")
+            MessageBox.Show("There is no tab with this name.")
             Return
         End If
         If (NombresPestañas.Contains(NuevoNombre)) Then
@@ -1297,15 +1396,18 @@ Public Class BrickBox
 
         For Each tab As TabPage In _Form1.TabControl1.TabPages
             If (tab.Name.Equals(SuNombre)) Then
-                Dim index As Integer = tab.Tag
-                _Form1.TabControl1.TabPages.Item(index).Name = NuevoNombre
-                _Form1.TabControl1.TabPages.Item(index).Text = NuevoNombre
-                Me.NombresPestañas(index) = NuevoNombre
+                _Form1.TabControl1.TabPages.Item(tab.TabIndex).Name = NuevoNombre
+                _Form1.TabControl1.TabPages.Item(tab.TabIndex).Text = NuevoNombre
+                Me.NombresPestañas(Me.NombresPestañas.IndexOf(tab.Name)) = NuevoNombre
+                For Each b As Brick In tab.Controls(0).Controls
+                    b.Pestaña = NuevoNombre
+                Next
                 HaCambiado = True
                 Exit For
             End If
         Next
     End Sub
+
 
 #End Region
 
@@ -1313,7 +1415,7 @@ Public Class BrickBox
     Public Function FindBrick(SuNombre As String, SuPestaña As String) As Brick
         Dim tab As TabPage = FindTab(SuPestaña)
         If (tab Is Nothing) Then
-            MessageBox.Show("The brick """ & SuNombre & """ has a tab that does Not exist in this box.")
+            MessageBox.Show("The brick """ & SuNombre & """ has a tab that does not exist in this box.")
             Return Nothing
             Exit Function
         End If
@@ -1369,7 +1471,7 @@ Public Class BrickBox
             MessageBox.Show("You need to load a file to save.")
             OpenNewFile()
             SaveToFile()
-            Return
+            Exit Sub
         End Try
         '1. Get root.
         Dim root As GH_Chunk = archive.GetRootNode()
@@ -1405,10 +1507,6 @@ Public Class BrickBox
 
     Public Sub LoadFromFile(File As String)
 
-        'If Not (System.IO.File.Exists(File)) Then
-        '    OpenNewFile()
-        '    Return
-        'End If
         Me.VaciarCaja()
 
         '0. Read file.
@@ -1418,7 +1516,7 @@ Public Class BrickBox
         Catch ex As Exception
             MessageBox.Show("Load a valid file.")
             OpenNewFile()
-            Return
+            Exit Sub
         End Try
         '1. Get root.
         Dim root As GH_Chunk = archive.GetRootNode()
@@ -1440,7 +1538,7 @@ Public Class BrickBox
             For j As Int32 = 0 To ChunkTab.ChunkCount - 1
                 Dim chunkBrick As GH_Chunk = ChunkTab.Chunks(j)
                 Dim b As New Brick(_Form1, chunkBrick)
-                Me.AddBrick(b)
+                If (b.IsValid) Then Me.AddBrick(b)
             Next
         Next
         HaCambiado = False
@@ -1466,7 +1564,6 @@ Public Class BrickBox
             MessageBox.Show("The file is empty, nothing to append.")
             Exit Sub
         End If
-        Dim log As String = "The following bricks are not added by duplication of name: "
         '3. Get tab chunks.
         For i As Int32 = 0 To RootBox.ChunkCount - 1
             Dim ChunkTab As GH_Chunk = RootBox.Chunks(i)
@@ -1475,16 +1572,13 @@ Public Class BrickBox
             For j As Int32 = 0 To ChunkTab.ChunkCount - 1
                 Dim chunkBrick As GH_Chunk = ChunkTab.Chunks(j)
                 Dim b As New Brick(_Form1, chunkBrick)
-                If Not (NombresBloques.Contains(b.Nombre)) Then
-                    Me.AddBrick(b)
-                Else
-                    log = log & vbCrLf & "Name: " & b.Nombre & ", tab: " & b.Pestaña
+                If (NombresBloques.Contains(b.Nombre)) Then
+                    b.Nombre = b.Nombre & "*"
+                    b.Name = b.Name & "*"
                 End If
+                Me.AddBrick(b)
             Next
         Next
-        If Not (log.Equals("The following bricks are not added by duplication of name: ")) Then
-            MessageBox.Show(log, "Log")
-        End If
         HaCambiado = True
     End Sub
 
@@ -1495,6 +1589,7 @@ Public Class BrickBox
                 LoadFromFile(File)
             Catch ex As Exception
                 MessageBox.Show("Something went wrong at load the file.")
+                Rhino.RhinoApp.WriteLine(ex.ToString())
             End Try
             My.Settings.FilePath = File
             My.Settings.Save()
@@ -1546,7 +1641,6 @@ Public Class Preview
                 bloque.Refresh()
                 If (Convert.ToBoolean(_Form1.ButtOpenTabs.Tag)) Then _Form1.TabsToTree()
                 _Form1.Caja.HaCambiado = True
-                'MessageBox.Show("Name changed.")
             Else
                 MessageBox.Show("Already exists a brick with this name.")
             End If
@@ -1558,9 +1652,7 @@ Public Class Preview
             Dim newtab As String = Me.ComboBoxTab.SelectedText
             If Not (Me.ComboBoxTab.SelectedText.Equals(ThisBrick.Pestaña)) AndAlso (_Form1.Caja.NombresPestañas.Contains(newtab)) Then
                 Dim bloque As Brick = _Form1.Caja.FindBrick(ThisBrick.Nombre, ThisBrick.Pestaña)
-
                 _Form1.Caja.ChangeTabOfBrick(ThisBrick, newtab)
-                'MessageBox.Show("Tab changed.")
             End If
         End If
     End Sub
@@ -1577,10 +1669,9 @@ Public Class Preview
                     bloque.Image = img
                     bloque.Refresh()
                     _Form1.Caja.HaCambiado = True
-                    ' MessageBox.Show("Image changed.")
                 End If
             Catch ex As Exception
-                MessageBox.Show("The selected file Is Not a valid image type.")
+                MessageBox.Show("The selected file is not a valid image type.")
             End Try
         End If
     End Sub
