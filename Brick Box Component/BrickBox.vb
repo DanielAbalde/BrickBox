@@ -323,10 +323,10 @@ Public Class Form1
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Sizable
         Me.Icon = My.Resources.Icon24x24
         Me.ShowInTaskbar = True
-        Me.ShowIcon = False
+        Me.ShowIcon = True
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
-        Me.Text = "    Brick Box "
+        Me.Text = "Brick Box "
         Me.Owner = Grasshopper.Instances.DocumentEditor
         Me.HelpButton = True
         Me.MaximizeBox = False
@@ -388,7 +388,7 @@ Public Class Form1
                 Me.ButtOpenTabs.Size = New Size(WMinPanel, Me.ButtOpenTabs.Size.Height)
                 Me.Location = New Point(Me.Location.X - WTabsPanel, Me.Location.Y)
                 Me.Size = New Size(Me.Width + WTabsPanel, Me.Height)
-                Me.Text = "                                                        Brick Box"
+                ' Me.Text = "                                                        Brick Box"
                 Me.ToolTip1.SetToolTip(Me.ButtOpenTabs, "Hide the tabs manager")
                 Me.AddTabsControls()
                 Me.TabsToTree()
@@ -400,7 +400,7 @@ Public Class Form1
                 Me.ButtOpenTabs.Text = "<"
                 Me.Location = New Point(Me.Location.X + WTabsPanel, Me.Location.Y)
                 Me.Size = New Size(Me.Width - WTabsPanel, Me.Height)
-                Me.Text = "   Brick Box"
+                '   Me.Text = "   Brick Box"
                 Me.SplitContainer1.SplitterDistance = WMinPanel
                 Me.ToolTip1.SetToolTip(Me.ButtOpenTabs, "Show the tabs manager")
             End If
@@ -1039,9 +1039,11 @@ Public Class Brick
         Dim mayorX As Int32 = Int32.MaxValue
         Dim mayorY As Int32 = Int32.MaxValue
         For Each obj As IGH_DocumentObject In DocIO.Document.Objects()
-            Dim pivot As PointF = obj.Attributes.Pivot
-            If (pivot.X < mayorX) Then mayorX = pivot.X
-            If (pivot.Y < mayorY) Then mayorY = pivot.Y
+            If Not (obj.Name.Equals("Group")) Then
+                Dim pivot As PointF = obj.Attributes.Pivot
+                If (pivot.X < mayorX) Then mayorX = pivot.X
+                If (pivot.Y < mayorY) Then mayorY = pivot.Y
+            End If
         Next
 
         Dim offset As New Size(Mypivot.X - mayorX, Mypivot.Y - mayorY)
@@ -1527,7 +1529,7 @@ Public Class BrickBox
         '2. Get BrickBox chunk.
         Dim RootBox As GH_Chunk = root.FindChunk(NameBox)
         If (RootBox Is Nothing) Then
-            MessageBox.Show("The file is empty." & vbCrLf & "Begins creating a tab in order to add blocks, " & vbCrLf & "from the left side button.")
+            MessageBox.Show("The BrickBox file is empty." & vbCrLf & "To start using it you need to create at least one tab. " & vbCrLf & "To create tabs, expand the BrickBox form by clicking the tall button on the left.")
             Return
         End If
         '3. Get tab chunks.
@@ -2334,6 +2336,7 @@ Public Class BrickBoxComp
     Protected Overrides Sub AppendAdditionalComponentMenuItems(menu As ToolStripDropDown)
         MyBase.AppendAdditionalComponentMenuItems(menu)
         GH_DocumentObject.Menu_AppendItem(menu, "Contact", AddressOf Contact)
+
     End Sub
 
     Private PopUp As ContactPopUp
@@ -2342,6 +2345,9 @@ Public Class BrickBoxComp
         If (PopUp IsNot Nothing) Then PopUp.Dispose()
         PopUp = New ContactPopUp()
     End Sub
+
+
+
 
 End Class
 
