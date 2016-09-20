@@ -1,0 +1,9 @@
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\bin\BrickBox2_AddOn.dll
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\bin\BrickBox2_AddOn.pdb
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\bin\BrickBox2_AddOn.xml
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\obj\Debug64\BrickBox2_AddOn.vbprojResolveAssemblyReference.cache
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\obj\Debug64\BrickBox2_AddOn.Resources.resources
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\obj\Debug64\BrickBox2_AddOn.vbproj.GenerateResource.Cache
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\obj\Debug64\BrickBox2_AddOn.dll
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\obj\Debug64\BrickBox2_AddOn.xml
+X:\Grasshopper\Míos\BrickBox 2\BrickBox2_AddOn\BrickBox2_AddOn\obj\Debug64\BrickBox2_AddOn.pdb
