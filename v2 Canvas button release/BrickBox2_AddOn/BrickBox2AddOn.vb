@@ -341,9 +341,9 @@ Public Class BrickBoxButton
         Set(value As FormSelectDefinition)
             mSelectDefForm = value
             If value Is Nothing Then
-                MyBase.Image = New Bitmap("X:\Grasshopper\Míos\BrickBox 2\icon24x24closed.png")
+                MyBase.Image = My.Resources.icon24x24closed
             Else
-                MyBase.Image = New Bitmap("X:\Grasshopper\Míos\BrickBox 2\icon24x24open.png")
+                MyBase.Image = My.Resources.icon24x24open
             End If
         End Set
     End Property
